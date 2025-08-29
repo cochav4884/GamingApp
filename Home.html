@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="styles/Home.css" />
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <title>Gaming App</title>
+  </head>
+
+  <body>
+    <!-- Left Sidebar -->
+    <div id="mySidebarLeft" class="sidebar">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()"
+        >&times;</a
+      >
+      <div class="lobby-title">Lobby</div>
+      <section>
+        Player List
+        <ul>
+          <li>Creator</li>
+          <li>Host</li>
+          <li>Player 1</li>
+          <li>Player 2</li>
+          <li>Player 3</li>
+          <li>Player 4</li>
+          <li>Player 5</li>
+          <li>Player 6</li>
+          <li>Player 7</li>
+          <li>Player 8</li>
+          <li>Player 9</li>
+          <li>Player 10</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- Left Sidebar Tab -->
+    <div id="sidebarTabLeft" class="sidebar-tab" onclick="openNavLeft()">
+      Lobby
+    </div>
+
+    <!-- Right Sidebar #1 -->
+    <div id="mySidebarRight1" class="sidebar-right">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNavRight1()"
+        >&times;</a
+      >
+      <div class="lobby-title">Background Images</div>
+      <section>
+        Select Image
+        <ul>
+          <li>Image 1</li>
+          <li>Image 2</li>
+          <li>Image 3</li>
+          <li>Image 4</li>
+          <li>Image 5</li>
+          <li>Image 6</li>
+          <li>Image 7</li>
+          <li>Image 8</li>
+          <li>Image 9</li>
+          <li>Image 10</li>
+          <li>Image 11</li>
+          <li>Image 12</li>
+          <li>Image 13</li>
+          <li>Image 14</li>
+          <li>Image 15</li>
+          <li>Image 16</li>
+          <li>Image 17</li>
+          <li>Image 18</li>
+          <li>Image 19</li>
+          <li>Image 20</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- Right Sidebar Tab #1 -->
+    <div
+      id="sidebarTabRight1"
+      class="sidebar-tab-right"
+      onclick="openNavRight1()"
+    >
+      Background
+    </div>
+
+    <!-- Right Sidebar #2 -->
+    <div id="mySidebarRight2" class="sidebar-right second-sidebar-right">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNavRight2()"
+        >&times;</a
+      >
+      <div class="lobby-title">Assets</div>
+      <section>
+        Choose Asset
+        <ul>
+          <li>Asset 1</li>
+          <li>Asset 2</li>
+          <li>Asset 3</li>
+          <li>Asset 4</li>
+          <li>Asset 5</li>
+          <li>Asset 6</li>
+          <li>Asset 7</li>
+          <li>Asset 8</li>
+          <li>Asset 9</li>
+          <li>Asset 10</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- Right Sidebar Tab #2 -->
+    <div
+      id="sidebarTabRight2"
+      class="sidebar-tab-right second-sidebar-tab-right"
+      onclick="openNavRight2()"
+    >
+      Assets
+    </div>
+
+    <!-- Main content -->
+    <div id="main">
+      <h1>Battlefield</h1>
+      <button type="button" class="btn btn-secondary">FullScreen</button>
+      <p>
+        Main content area. Open any sidebar using the tabs. Both right sidebars
+        are independent.
+      </p>
+    </div>
+
+    <script>
+      // Left Sidebar
+      function openNavLeft() {
+        document.getElementById("mySidebarLeft").style.width = "250px";
+        document.getElementById("main").classList.add("left-open");
+        document.getElementById("sidebarTabLeft").style.display = "none";
+      }
+      function closeNavLeft() {
+        document.getElementById("mySidebarLeft").style.width = "0";
+        document.getElementById("main").classList.remove("left-open");
+        document.getElementById("sidebarTabLeft").style.display = "block";
+      }
+
+      // Right Sidebar #1
+      function openNavRight1() {
+        document.getElementById("mySidebarRight1").style.width = "250px";
+        document.getElementById("main").classList.add("right1-open");
+        document.getElementById("sidebarTabRight1").style.display = "none";
+      }
+      function closeNavRight1() {
+        document.getElementById("mySidebarRight1").style.width = "0";
+        document.getElementById("main").classList.remove("right1-open");
+        document.getElementById("sidebarTabRight1").style.display = "block";
+      }
+
+      // Right Sidebar #2
+      function openNavRight2() {
+        document.getElementById("mySidebarRight2").style.width = "250px";
+        document.getElementById("main").classList.add("right2-open");
+        document.getElementById("sidebarTabRight2").style.display = "none";
+      }
+      function closeNavRight2() {
+        document.getElementById("mySidebarRight2").style.width = "0";
+        document.getElementById("main").classList.remove("right2-open");
+        document.getElementById("sidebarTabRight2").style.display = "block";
+      }
+    </script>
+  </body>
+</html>

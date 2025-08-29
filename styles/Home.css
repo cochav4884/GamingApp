@@ -1,0 +1,285 @@
+/* ==================== */
+/* Body */
+body {
+  background-color: rgb(52, 120, 147);
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* ==================== */
+/* Left Sidebar */
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  overflow-x: hidden;
+  padding-top: 60px;
+  transition: 0.5s;
+  color: #000;
+}
+
+.sidebar .lobby-title {
+  font-size: 24px;
+  font-weight: bold;
+  padding-left: 32px;
+  margin-bottom: 20px;
+}
+
+.sidebar section,
+.sidebar div {
+  padding-left: 32px;
+  padding-top: 8px;
+}
+
+.sidebar .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+  color: #000;
+  text-decoration: none;
+}
+
+/* Left Sidebar Tab */
+.sidebar-tab {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  background-color: #111;
+  color: white;
+  padding: 15px 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 3;
+  border-radius: 0 5px 5px 0;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transition: 0.3s;
+}
+
+.sidebar-tab:hover {
+  background-color: #444;
+}
+
+/* ==================== */
+/* Right Sidebar #1 */
+.sidebar-right {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  background-color: #fff;
+  overflow-x: hidden;
+  padding-top: 60px;
+  transition: 0.5s;
+  color: #000;
+}
+
+.sidebar-right .lobby-title {
+  font-size: 24px;
+  font-weight: bold;
+  padding-left: 32px;
+  margin-bottom: 20px;
+}
+
+.sidebar-right section,
+.sidebar-right div {
+  padding-left: 32px;
+  padding-top: 8px;
+}
+
+.sidebar-right .closebtn {
+  position: absolute;
+  top: 0;
+  left: 25px;
+  font-size: 36px;
+  color: #000;
+  text-decoration: none;
+}
+
+/* Right Sidebar Tab #1 */
+.sidebar-tab-right {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-color: #111;
+  color: white;
+  padding: 15px 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 3;
+  border-radius: 5px 0 0 5px;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transition: 0.3s;
+}
+
+.sidebar-tab-right:hover {
+  background-color: #444;
+}
+
+/* ==================== */
+/* Right Sidebar #2 */
+.second-sidebar-right {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  background-color: #fff;
+  overflow-x: hidden;
+  padding-top: 60px;
+  transition: 0.5s;
+  color: #000;
+}
+
+.second-sidebar-right .lobby-title {
+  font-size: 24px;
+  font-weight: bold;
+  padding-left: 32px;
+  margin-bottom: 20px;
+}
+
+.second-sidebar-right section,
+.second-sidebar-right div {
+  padding-left: 32px;
+  padding-top: 8px;
+}
+
+.second-sidebar-right .closebtn {
+  position: absolute;
+  top: 0;
+  left: 25px;
+  font-size: 36px;
+  color: #000;
+  text-decoration: none;
+}
+
+/* Right Sidebar Tab #2 */
+.second-sidebar-tab-right {
+  position: fixed;
+  top: calc(50% + 60px); /* slightly below first right tab */
+  right: 0;
+  transform: translateY(-50%);
+  background-color: #111;
+  color: white;
+  padding: 15px 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 3;
+  border-radius: 5px 0 0 5px;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transition: 0.3s;
+}
+
+.second-sidebar-tab-right:hover {
+  background-color: #444;
+}
+
+/* ==================== */
+/* Dice Box */
+.diceBox {
+  border: solid #000;
+  padding: 20px;
+  margin: 10px;
+}
+
+/* ==================== */
+/* Main Content */
+#main {
+  transition: margin 0.5s;
+  padding: 20px;
+  margin-left: 60px;   /* space for left tab */
+  margin-right: 60px;  /* space for right tabs */
+}
+
+/* When left sidebar opens */
+#main.left-open {
+  margin-left: 250px;
+}
+
+/* When right sidebar #1 opens */
+#main.right1-open {
+  margin-right: 250px;
+}
+
+/* When right sidebar #2 opens */
+#main.right2-open {
+  margin-right: 250px;
+}
+
+/* If both right sidebars open, stack them */
+#main.right1-open.right2-open {
+  margin-right: 500px; /* 2 sidebars of 250px each */
+}
+
+
+/* ==================== */
+/* Responsive Behavior */
+
+/* Medium screens (tablet) */
+@media screen and (max-width: 992px) {
+  #main {
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+
+  .sidebar,
+  .sidebar-right,
+  .second-sidebar-right {
+    width: 0;
+  }
+
+  .sidebar-tab,
+  .sidebar-tab-right,
+  .second-sidebar-tab-right {
+    display: block;
+  }
+}
+
+/* Small screens (mobile) */
+@media screen and (max-width: 576px) {
+  .sidebar,
+  .sidebar-right,
+  .second-sidebar-right {
+    width: 0;
+    position: fixed;
+    height: 100%;
+  }
+
+  .sidebar {
+    left: 0;
+  }
+
+  .sidebar-right,
+  .second-sidebar-right {
+    right: 0;
+  }
+
+  .sidebar-tab,
+  .sidebar-tab-right,
+  .second-sidebar-tab-right {
+    font-size: 14px;
+    padding: 10px 8px;
+  }
+
+  #main {
+    margin-left: 40px;
+    margin-right: 40px;
+    padding: 15px;
+  }
+}
