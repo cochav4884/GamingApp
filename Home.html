@@ -56,35 +56,7 @@
       >
       <div class="lobby-title">Background Images</div>
       <section>
-        Select Image
-        <ul>
-          <li onclick="setBattlefieldBackground('images/Dessert-Ruins.jpg')">
-            Dessert Ruins
-          </li>
-          <li onclick="setBattlefieldBackground('images/Rose-Court.jpg')">
-            Rose-Court
-          </li>
-          <li onclick="setBattlefieldBackground('images/Winter-Forrest-2.jpg')">
-            Winter-Forrest-2
-          </li>
-          <li>Image 4</li>
-          <li>Image 5</li>
-          <li>Image 6</li>
-          <li>Image 7</li>
-          <li>Image 8</li>
-          <li>Image 9</li>
-          <li>Image 10</li>
-          <li>Image 11</li>
-          <li>Image 12</li>
-          <li>Image 13</li>
-          <li>Image 14</li>
-          <li>Image 15</li>
-          <li>Image 16</li>
-          <li>Image 17</li>
-          <li>Image 18</li>
-          <li>Image 19</li>
-          <li>Image 20</li>
-        </ul>
+        <ul id="backgroundList"></ul>
       </section>
     </div>
 
@@ -219,6 +191,78 @@
         battlefield.style.backgroundSize = "cover";
         battlefield.style.backgroundPosition = "center";
       }
+
+      // Array of all background image filenames
+      const backgroundImages = [
+        "Abandoned-Building.jpg",
+        "Abandoned-Quarry.jpg",
+        "Abandoned-Village.jpg",
+        "Acid-Cave.jpg",
+        "Amethyst-Fortress.jpg",
+        "Ancient-Courtyard.jpg",
+        "Beach-Cove.jpg",
+        "Beach-Front.jpg",
+        "Brimstone-Path.jpg",
+        "Brimstone-Plateu.jpg",
+        "Cathedral-Ruins.jpg",
+        "Demon-Lair.jpg",
+        "Dessert-Ruins.jpg",
+        "Farm.jpg",
+        "Farm-2.jpg",
+        "Forest-Glade.jpg",
+        "Forest-Ruins.jpg",
+        "Forgotten-Crypt.jpg",
+        "Forgotten-Monastery.jpg",
+        "Fort.jpg",
+        "Fort-2.jpg",
+        "Galleon-Ship.jpg",
+        "Glacier-Castle.jpg",
+        "Haunted-Garden.jpg",
+        "Infernal-Tomb.jpg",
+        "Jungle-Path.jpg",
+        "Jungle-Ruins.jpg",
+        "Jungle-Ruins-2.jpg",
+        "Lost-Temple.jpg",
+        "Market.jpg",
+        "Market-2.jpg",
+        "Moat-Checkpoint.jpg",
+        "Multen-Arena.jpg",
+        "Nest.jpg",
+        "Obsidian-Fortress.jpg",
+        "Reprieve.jpg",
+        "River-Crossings.jpg",
+        "River-Fort.jpg",
+        "Rocky-Path.jpg",
+        "Rose-Court.jpg",
+        "Ship-Yard.jpg",
+        "Shipwreck.jpg",
+        "Slate-Path.jpg",
+        "Snow-Fort.jpg",
+        "Snow-Fort-2.jpg",
+        "Spider-Cave.jpg",
+        "Spider-Dwelling.jpg",
+        "Spider-Fortress.jpg",
+        "Stone-Beach.jpg",
+        "Twisting-Trail.jpg",
+        "Typical-Tavern.jpg",
+        "Village.jpg",
+        "War-Zone.jpg",
+        "War-Zone-2.jpg",
+        "Winter-Forest.jpg",
+        "Winter-Forest-2.jpg",
+        // Add all other filenames up to 56
+      ];
+
+      // Generate the list dynamically
+      const backgroundList = document.getElementById("backgroundList");
+
+      backgroundImages.forEach((image) => {
+        const li = document.createElement("li");
+        li.textContent = image.replace(/-/g, " ").replace(".jpg", ""); // Clean display name
+        li.style.cursor = "pointer";
+        li.onclick = () => setBattlefieldBackground(`images/${image}`);
+        backgroundList.appendChild(li);
+      });
     </script>
   </body>
 </html>
