@@ -16,7 +16,9 @@
   <body>
     <!-- Left Sidebar -->
     <div id="LobbySidebar" class="sidebar-left Lobby">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNavLobby()">&times;</a>
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNavLobby()"
+        >&times;</a
+      >
       <div class="lobby-title">Lobby</div>
       <section>
         Player List
@@ -37,9 +39,7 @@
       </section>
       <div>
         Dice Box
-        <div class="dice">
-            Roll Dice
-        </div>
+        <div class="dice">Roll Dice</div>
       </div>
     </div>
 
@@ -48,7 +48,12 @@
 
     <!-- Right Sidebar #1 -->
     <div id="BackgroundSidebar" class="sidebar-right BackgroundImages">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNavBackground()">&times;</a>
+      <a
+        href="javascript:void(0)"
+        class="closebtn"
+        onclick="closeNavBackground()"
+        >&times;</a
+      >
       <div class="lobby-title">Background Images</div>
       <section>
         Select Image
@@ -78,13 +83,19 @@
     </div>
 
     <!-- Right Sidebar Tab #1 -->
-    <div id="BackgroundTab" class="sidebar-tab-right BackgroundImages" onclick="openNavBackground()">
+    <div
+      id="BackgroundTab"
+      class="sidebar-tab-right BackgroundImages"
+      onclick="openNavBackground()"
+    >
       Background
     </div>
 
     <!-- Right Sidebar #2 -->
     <div id="AssetsSidebar" class="sidebar-right Assets">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNavAssets()">&times;</a>
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNavAssets()"
+        >&times;</a
+      >
       <div class="lobby-title">Assets</div>
       <section>
         Choose Asset
@@ -104,16 +115,39 @@
     </div>
 
     <!-- Right Sidebar Tab #2 -->
-    <div id="AssetsTab" class="sidebar-tab-right Assets" onclick="openNavAssets()">
+    <div
+      id="AssetsTab"
+      class="sidebar-tab-right Assets"
+      onclick="openNavAssets()"
+    >
       Assets
     </div>
 
     <!-- Main content -->
     <div id="main">
       <h1>Battlefield</h1>
-      <button type="button" class="btn btn-secondary">FullScreen</button>
+
+      <!-- Battlefield container -->
+      <div id="battlefield">
+        <button id="fullscreenBtn" type="button" class="btn btn-secondary">
+          FullScreen
+        </button>
+        <button
+          id="exitFullscreenBtn"
+          type="button"
+          class="btn btn-danger"
+          style="display: none"
+        >
+          Exit FullScreen
+        </button>
+
+        <!-- Grid overlay -->
+        <div class="grid-overlay"></div>
+      </div>
+
       <p>
-        Main content area. Open any sidebar using the tabs. Both right sidebars are independent.
+        Main content area. Open any sidebar using the tabs. Both right sidebars
+        are independent.
       </p>
     </div>
 
@@ -153,6 +187,23 @@
         document.getElementById("main").classList.remove("right2-open");
         document.getElementById("AssetsTab").style.display = "block";
       }
+
+      // Fullscreen toggle
+      const battlefield = document.getElementById("battlefield");
+      const fullscreenBtn = document.getElementById("fullscreenBtn");
+      const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
+
+      fullscreenBtn.addEventListener("click", () => {
+        battlefield.classList.add("fullscreen");
+        fullscreenBtn.style.display = "none";
+        exitFullscreenBtn.style.display = "block";
+      });
+
+      exitFullscreenBtn.addEventListener("click", () => {
+        battlefield.classList.remove("fullscreen");
+        fullscreenBtn.style.display = "block";
+        exitFullscreenBtn.style.display = "none";
+      });
     </script>
   </body>
 </html>

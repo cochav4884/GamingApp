@@ -238,6 +238,48 @@ body {
 }
 
 /* ==================== */
+/* Battlefield container */
+#battlefield {
+  position: relative;
+  width: 100%;
+  height: 500px; /* adjust height as needed */
+  background-color: #333; /* fallback color */
+  background-size: cover; /* scale the image */
+  background-position: center;
+  border: 2px solid #000;
+  margin-top: 20px;
+}
+
+#battlefield.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  background-color: #fff; /* optional background */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Grid overlay on top of battlefield */
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); /* 10 columns */
+  grid-template-rows: repeat(10, 1fr);    /* 10 rows */
+  pointer-events: none; /* allow clicks to pass through */
+}
+
+.grid-overlay div {
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* ==================== */
 /* Responsive Behavior */
 
 /* Medium screens (tablet) */
