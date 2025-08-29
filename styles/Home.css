@@ -278,6 +278,14 @@ body {
   display: none;
 }
 
+/* Fullscreen & Exit Fullscreen buttons */
+#battlefield button {
+  position: absolute;
+  top: 10px;       /* distance from top of battlefield */
+  right: 10px;     /* distance from right edge */
+  z-index: 3;      /* above grid overlay */
+}
+
 
 /* Grid overlay on top of battlefield */
 .grid-overlay {
@@ -286,10 +294,12 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  display: grid;
-  grid-template-columns: repeat(10, 1fr); /* 10 columns */
-  grid-template-rows: repeat(10, 1fr);    /* 10 rows */
-  pointer-events: none; /* allow clicks to pass through */
+  pointer-events: none; /* lets clicks pass through */
+  background-image:
+    linear-gradient(to right, rgba(0,0,0,0.3) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.3) 1px, transparent 1px);
+  background-size: 25px 25px; /* 5px = 5-foot squares */
+  z-index: 2;
 }
 
 .grid-overlay div {
