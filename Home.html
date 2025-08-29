@@ -77,18 +77,7 @@
       <div class="lobby-title">Assets</div>
       <section>
         Choose Asset
-        <ul>
-          <li>Asset 1</li>
-          <li>Asset 2</li>
-          <li>Asset 3</li>
-          <li>Asset 4</li>
-          <li>Asset 5</li>
-          <li>Asset 6</li>
-          <li>Asset 7</li>
-          <li>Asset 8</li>
-          <li>Asset 9</li>
-          <li>Asset 10</li>
-        </ul>
+        <ul id="assetList"></ul>
       </section>
     </div>
 
@@ -107,8 +96,10 @@
 
       <!-- Battlefield container -->
       <div id="battlefield">
-        <!-- Grid overlay -->
-        <div class="grid-overlay"></div>
+        <!-- Grid squares will be generated dynamically by JS -->
+        <div id="gridOverlay" class="grid-overlay"></div>
+
+        <!-- Fullscreen buttons -->
         <button id="fullscreenBtn" type="button" class="btn btn-secondary">
           FullScreen
         </button>
@@ -128,7 +119,7 @@
     </div>
 
     <script>
-      // Left Sidebar
+      // -------------------- Sidebar Functions --------------------
       function openNavLobby() {
         document.getElementById("LobbySidebar").style.width = "250px";
         document.getElementById("main").classList.add("left-open");
@@ -140,7 +131,6 @@
         document.getElementById("LobbyTab").style.display = "block";
       }
 
-      // Right Sidebar #1 (Background Images)
       function openNavBackground() {
         document.getElementById("BackgroundSidebar").style.width = "250px";
         document.getElementById("main").classList.add("right1-open");
@@ -152,7 +142,6 @@
         document.getElementById("BackgroundTab").style.display = "block";
       }
 
-      // Right Sidebar #2 (Assets)
       function openNavAssets() {
         document.getElementById("AssetsSidebar").style.width = "250px";
         document.getElementById("main").classList.add("right2-open");
@@ -164,7 +153,7 @@
         document.getElementById("AssetsTab").style.display = "block";
       }
 
-      // Fullscreen toggle
+      // -------------------- Fullscreen --------------------
       const battlefield = document.getElementById("battlefield");
       const fullscreenBtn = document.getElementById("fullscreenBtn");
       const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
@@ -181,8 +170,7 @@
         exitFullscreenBtn.style.display = "none";
       });
 
-      document.getElementById("exitFullscreenBtn").classList.remove("hidden"); // show
-      document.getElementById("exitFullscreenBtn").classList.add("hidden"); // hide
+      // -------------------- Backgrounds --------------------
 
       // Set the battlefield background
       function setBattlefieldBackground(imagePath) {
@@ -263,6 +251,80 @@
         li.onclick = () => setBattlefieldBackground(`images/${image}`);
         backgroundList.appendChild(li);
       });
+
+      // -------------------- Assets --------------------
+      const assets = [
+        { id: 1, name: "Treasure Chest", x: null, y: null, found: false },
+        { id: 2, name: "Magic Sword", x: null, y: null, found: false },
+        { id: 3, name: "Potion", x: null, y: null, found: false },
+      ];
+
+      const assetList = document.getElementById("assetList");
+      assets.forEach((asset) => {
+        const li = document.createElement("li");
+        li.textContent = asset.name;
+        li.draggable = true;
+        li.dataset.id = asset.id;
+        li.style.cursor = "grab";
+        li.addEventListener("dragstart", (e) =>
+          e.dataTransfer.setData("text/plain", asset.id)
+        );
+        assetList.appendChild(li);
+      });
+
+      // -------------------- Grid Squares --------------------
+      const gridOverlay = document.querySelector(".grid-overlay");
+      const gridWidth = Math.floor(battlefield.clientWidth / 25);
+      const gridHeight = Math.floor(battlefield.clientHeight / 25);
+
+      for (let y = 0; y < gridHeight; y++) {
+        for (let x = 0; x < gridWidth; x++) {
+          const square = document.createElement("div");
+          square.classList.add("grid-square");
+          square.dataset.x = x;
+          square.dataset.y = y;
+
+          // Position the square
+          square.style.left = `${x * 25}px`;
+          square.style.top = `${y * 25}px`;
+
+          // Drag/drop listeners
+          square.addEventListener("dragover", (e) => e.preventDefault());
+          square.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const assetId = e.dataTransfer.getData("text/plain");
+            const asset = assets.find((a) => a.id == assetId);
+            if (!asset) return;
+
+            // Remove previous placement if any
+            document.querySelectorAll(".placed-asset").forEach((el) => {
+              if (el.dataset.id == assetId) el.remove();
+            });
+
+            // Place asset
+            const assetDiv = document.createElement("div");
+            assetDiv.classList.add("placed-asset");
+            assetDiv.textContent = asset.name;
+            assetDiv.dataset.id = asset.id;
+            assetDiv.style.position = "absolute";
+            assetDiv.style.width = "100%";
+            assetDiv.style.height = "100%";
+            assetDiv.style.display = "flex";
+            assetDiv.style.alignItems = "center";
+            assetDiv.style.justifyContent = "center";
+            square.appendChild(assetDiv);
+
+            // Store coordinates
+            asset.x = square.dataset.x;
+            asset.y = square.dataset.y;
+            asset.found = true;
+
+            console.log(`Placed ${asset.name} at (${asset.x}, ${asset.y})`);
+          });
+
+          gridOverlay.appendChild(square);
+        }
+      }
     </script>
   </body>
 </html>
