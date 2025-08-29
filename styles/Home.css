@@ -8,7 +8,7 @@ body {
 
 /* ==================== */
 /* Left Sidebar */
-.sidebar {
+.Lobby {
   height: 100%;
   width: 0;
   position: fixed;
@@ -22,20 +22,20 @@ body {
   color: #000;
 }
 
-.sidebar .lobby-title {
+.Lobby .lobby-title {
   font-size: 24px;
   font-weight: bold;
   padding-left: 32px;
   margin-bottom: 20px;
 }
 
-.sidebar section,
-.sidebar div {
+.Lobby section,
+.Lobby div {
   padding-left: 32px;
   padding-top: 8px;
 }
 
-.sidebar .closebtn {
+.Lobby .closebtn {
   position: absolute;
   top: 0;
   right: 25px;
@@ -46,14 +46,14 @@ body {
 }
 
 /* Left Sidebar Tab */
-.sidebar-tab {
+#LobbyTab {
   position: fixed;
   top: 50%;
   left: 0;
   transform: translateY(-50%);
   background-color: #111;
   color: white;
-  padding: 15px 10px;
+  padding: 15px 10px 15px 10px; /* top, right, bottom, left */
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -64,13 +64,21 @@ body {
   transition: 0.3s;
 }
 
-.sidebar-tab:hover {
+#LobbyTab:hover {
   background-color: #444;
 }
 
 /* ==================== */
-/* Right Sidebar #1 */
-.sidebar-right {
+/* Right Side Dice Box */
+.dice {
+    border: 2px solid #000;
+    padding: 20px 20px 20px 20px;
+    margin: 25px 25px 25px 25px;
+}
+
+/* ==================== */
+/* Right Sidebar #1 - BackgroundImages */
+.BackgroundImages {
   height: 100%;
   width: 0;
   position: fixed;
@@ -84,20 +92,20 @@ body {
   color: #000;
 }
 
-.sidebar-right .lobby-title {
+.BackgroundImages .lobby-title {
   font-size: 24px;
   font-weight: bold;
   padding-left: 32px;
   margin-bottom: 20px;
 }
 
-.sidebar-right section,
-.sidebar-right div {
+.BackgroundImages section,
+.BackgroundImages div {
   padding-left: 32px;
   padding-top: 8px;
 }
 
-.sidebar-right .closebtn {
+.BackgroundImages .closebtn {
   position: absolute;
   top: 0;
   left: 25px;
@@ -106,15 +114,15 @@ body {
   text-decoration: none;
 }
 
-/* Right Sidebar Tab #1 */
-.sidebar-tab-right {
+/* Right Sidebar Tab #1: Background */
+#BackgroundTab {
   position: fixed;
-  top: 50%;
+  top: 45%; /* move slightly up */
   right: 0;
   transform: translateY(-50%);
   background-color: #111;
   color: white;
-  padding: 15px 10px;
+  padding: 15px 10px 15px 25px; /* top, right, bottom, left */
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -123,15 +131,16 @@ body {
   writing-mode: vertical-rl;
   text-orientation: mixed;
   transition: 0.3s;
+  height: auto;
 }
 
-.sidebar-tab-right:hover {
+#BackgroundTab:hover {
   background-color: #444;
 }
 
 /* ==================== */
-/* Right Sidebar #2 */
-.second-sidebar-right {
+/* Right Sidebar #2 - Assets */
+.Assets {
   height: 100%;
   width: 0;
   position: fixed;
@@ -145,20 +154,20 @@ body {
   color: #000;
 }
 
-.second-sidebar-right .lobby-title {
+.Assets .lobby-title {
   font-size: 24px;
   font-weight: bold;
   padding-left: 32px;
   margin-bottom: 20px;
 }
 
-.second-sidebar-right section,
-.second-sidebar-right div {
+.Assets section,
+.Assets div {
   padding-left: 32px;
   padding-top: 8px;
 }
 
-.second-sidebar-right .closebtn {
+.Assets .closebtn {
   position: absolute;
   top: 0;
   left: 25px;
@@ -167,15 +176,15 @@ body {
   text-decoration: none;
 }
 
-/* Right Sidebar Tab #2 */
-.second-sidebar-tab-right {
+/* Right Sidebar Tab #2: Assets */
+#AssetsTab {
   position: fixed;
-  top: calc(50% + 60px); /* slightly below first right tab */
+  top: 60%; /* move further down to prevent overlap */
   right: 0;
   transform: translateY(-50%);
   background-color: #111;
   color: white;
-  padding: 15px 10px;
+  padding: 15px 10px 15px 25px; /* top, right, bottom, left */
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -184,9 +193,10 @@ body {
   writing-mode: vertical-rl;
   text-orientation: mixed;
   transition: 0.3s;
+  height: auto;
 }
 
-.second-sidebar-tab-right:hover {
+#AssetsTab:hover {
   background-color: #444;
 }
 
@@ -203,8 +213,8 @@ body {
 #main {
   transition: margin 0.5s;
   padding: 20px;
-  margin-left: 60px;   /* space for left tab */
-  margin-right: 60px;  /* space for right tabs */
+  margin-left: 60px; /* space for left tab */
+  margin-right: 60px; /* space for right tabs */
 }
 
 /* When left sidebar opens */
@@ -224,9 +234,8 @@ body {
 
 /* If both right sidebars open, stack them */
 #main.right1-open.right2-open {
-  margin-right: 500px; /* 2 sidebars of 250px each */
+  margin-right: 500px;
 }
-
 
 /* ==================== */
 /* Responsive Behavior */
@@ -238,41 +247,41 @@ body {
     margin-right: 50px;
   }
 
-  .sidebar,
-  .sidebar-right,
-  .second-sidebar-right {
+  .Lobby,
+  .BackgroundImages,
+  .Assets {
     width: 0;
   }
 
-  .sidebar-tab,
-  .sidebar-tab-right,
-  .second-sidebar-tab-right {
+  #LobbyTab,
+  #BackgroundTab,
+  #AssetsTab {
     display: block;
   }
 }
 
 /* Small screens (mobile) */
 @media screen and (max-width: 576px) {
-  .sidebar,
-  .sidebar-right,
-  .second-sidebar-right {
+  .Lobby,
+  .BackgroundImages,
+  .Assets {
     width: 0;
     position: fixed;
     height: 100%;
   }
 
-  .sidebar {
+  .Lobby {
     left: 0;
   }
 
-  .sidebar-right,
-  .second-sidebar-right {
+  .BackgroundImages,
+  .Assets {
     right: 0;
   }
 
-  .sidebar-tab,
-  .sidebar-tab-right,
-  .second-sidebar-tab-right {
+  #LobbyTab,
+  #BackgroundTab,
+  #AssetsTab {
     font-size: 14px;
     padding: 10px 8px;
   }

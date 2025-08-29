@@ -15,10 +15,8 @@
 
   <body>
     <!-- Left Sidebar -->
-    <div id="mySidebarLeft" class="sidebar">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()"
-        >&times;</a
-      >
+    <div id="LobbySidebar" class="sidebar-left Lobby">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNavLobby()">&times;</a>
       <div class="lobby-title">Lobby</div>
       <section>
         Player List
@@ -37,18 +35,20 @@
           <li>Player 10</li>
         </ul>
       </section>
+      <div>
+        Dice Box
+        <div class="dice">
+            Roll Dice
+        </div>
+      </div>
     </div>
 
     <!-- Left Sidebar Tab -->
-    <div id="sidebarTabLeft" class="sidebar-tab" onclick="openNavLeft()">
-      Lobby
-    </div>
+    <div id="LobbyTab" class="sidebar-tab" onclick="openNavLobby()">Lobby</div>
 
     <!-- Right Sidebar #1 -->
-    <div id="mySidebarRight1" class="sidebar-right">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNavRight1()"
-        >&times;</a
-      >
+    <div id="BackgroundSidebar" class="sidebar-right BackgroundImages">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNavBackground()">&times;</a>
       <div class="lobby-title">Background Images</div>
       <section>
         Select Image
@@ -78,19 +78,13 @@
     </div>
 
     <!-- Right Sidebar Tab #1 -->
-    <div
-      id="sidebarTabRight1"
-      class="sidebar-tab-right"
-      onclick="openNavRight1()"
-    >
+    <div id="BackgroundTab" class="sidebar-tab-right BackgroundImages" onclick="openNavBackground()">
       Background
     </div>
 
     <!-- Right Sidebar #2 -->
-    <div id="mySidebarRight2" class="sidebar-right second-sidebar-right">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNavRight2()"
-        >&times;</a
-      >
+    <div id="AssetsSidebar" class="sidebar-right Assets">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNavAssets()">&times;</a>
       <div class="lobby-title">Assets</div>
       <section>
         Choose Asset
@@ -110,11 +104,7 @@
     </div>
 
     <!-- Right Sidebar Tab #2 -->
-    <div
-      id="sidebarTabRight2"
-      class="sidebar-tab-right second-sidebar-tab-right"
-      onclick="openNavRight2()"
-    >
+    <div id="AssetsTab" class="sidebar-tab-right Assets" onclick="openNavAssets()">
       Assets
     </div>
 
@@ -123,46 +113,45 @@
       <h1>Battlefield</h1>
       <button type="button" class="btn btn-secondary">FullScreen</button>
       <p>
-        Main content area. Open any sidebar using the tabs. Both right sidebars
-        are independent.
+        Main content area. Open any sidebar using the tabs. Both right sidebars are independent.
       </p>
     </div>
 
     <script>
       // Left Sidebar
-      function openNavLeft() {
-        document.getElementById("mySidebarLeft").style.width = "250px";
+      function openNavLobby() {
+        document.getElementById("LobbySidebar").style.width = "250px";
         document.getElementById("main").classList.add("left-open");
-        document.getElementById("sidebarTabLeft").style.display = "none";
+        document.getElementById("LobbyTab").style.display = "none";
       }
-      function closeNavLeft() {
-        document.getElementById("mySidebarLeft").style.width = "0";
+      function closeNavLobby() {
+        document.getElementById("LobbySidebar").style.width = "0";
         document.getElementById("main").classList.remove("left-open");
-        document.getElementById("sidebarTabLeft").style.display = "block";
+        document.getElementById("LobbyTab").style.display = "block";
       }
 
-      // Right Sidebar #1
-      function openNavRight1() {
-        document.getElementById("mySidebarRight1").style.width = "250px";
+      // Right Sidebar #1 (Background Images)
+      function openNavBackground() {
+        document.getElementById("BackgroundSidebar").style.width = "250px";
         document.getElementById("main").classList.add("right1-open");
-        document.getElementById("sidebarTabRight1").style.display = "none";
+        document.getElementById("BackgroundTab").style.display = "none";
       }
-      function closeNavRight1() {
-        document.getElementById("mySidebarRight1").style.width = "0";
+      function closeNavBackground() {
+        document.getElementById("BackgroundSidebar").style.width = "0";
         document.getElementById("main").classList.remove("right1-open");
-        document.getElementById("sidebarTabRight1").style.display = "block";
+        document.getElementById("BackgroundTab").style.display = "block";
       }
 
-      // Right Sidebar #2
-      function openNavRight2() {
-        document.getElementById("mySidebarRight2").style.width = "250px";
+      // Right Sidebar #2 (Assets)
+      function openNavAssets() {
+        document.getElementById("AssetsSidebar").style.width = "250px";
         document.getElementById("main").classList.add("right2-open");
-        document.getElementById("sidebarTabRight2").style.display = "none";
+        document.getElementById("AssetsTab").style.display = "none";
       }
-      function closeNavRight2() {
-        document.getElementById("mySidebarRight2").style.width = "0";
+      function closeNavAssets() {
+        document.getElementById("AssetsSidebar").style.width = "0";
         document.getElementById("main").classList.remove("right2-open");
-        document.getElementById("sidebarTabRight2").style.display = "block";
+        document.getElementById("AssetsTab").style.display = "block";
       }
     </script>
   </body>
