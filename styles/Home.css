@@ -262,6 +262,11 @@ body {
   box-sizing: border-box;
 }
 
+.hidden {
+  display: none;
+}
+
+
 /* Grid overlay on top of battlefield */
 .grid-overlay {
   position: absolute;

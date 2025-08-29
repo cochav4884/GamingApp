@@ -135,8 +135,7 @@
         <button
           id="exitFullscreenBtn"
           type="button"
-          class="btn btn-danger"
-          style="display: none"
+          class="btn btn-danger hidden"
         >
           Exit FullScreen
         </button>
@@ -204,6 +203,9 @@
         fullscreenBtn.style.display = "block";
         exitFullscreenBtn.style.display = "none";
       });
+
+      document.getElementById("exitFullscreenBtn").classList.remove("hidden"); // show
+      document.getElementById("exitFullscreenBtn").classList.add("hidden"); // hide
     </script>
   </body>
 </html>
