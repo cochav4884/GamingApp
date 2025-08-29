@@ -58,9 +58,15 @@
       <section>
         Select Image
         <ul>
-          <li>Image 1</li>
-          <li>Image 2</li>
-          <li>Image 3</li>
+          <li onclick="setBattlefieldBackground('images/Dessert-Ruins.jpg')">
+            Dessert Ruins
+          </li>
+          <li onclick="setBattlefieldBackground('images/Rose-Court.jpg')">
+            Rose-Court
+          </li>
+          <li onclick="setBattlefieldBackground('images/Winter-Forrest-2.jpg')">
+            Winter-Forrest-2
+          </li>
           <li>Image 4</li>
           <li>Image 5</li>
           <li>Image 6</li>
@@ -206,6 +212,14 @@
 
       document.getElementById("exitFullscreenBtn").classList.remove("hidden"); // show
       document.getElementById("exitFullscreenBtn").classList.add("hidden"); // hide
+
+      // Set the battlefield background
+      function setBattlefieldBackground(imagePath) {
+        const battlefield = document.getElementById("battlefield");
+        battlefield.style.backgroundImage = `url('${imagePath}')`;
+        battlefield.style.backgroundSize = "cover";
+        battlefield.style.backgroundPosition = "center";
+      }
     </script>
   </body>
 </html>
