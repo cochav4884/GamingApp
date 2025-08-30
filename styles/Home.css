@@ -150,8 +150,8 @@ body {
 }
 
 /* ==================== */
-/* Right Sidebar #2 - Assets */
-.Assets {
+/* Right Sidebar #2 - ArrowBow */
+.ArrowBow {
   height: 100%;
   width: 0;
   position: fixed;
@@ -165,20 +165,20 @@ body {
   color: #000;
 }
 
-.Assets .lobby-title {
+.ArrowBow .lobby-title {
   font-size: 24px;
   font-weight: bold;
   padding-left: 32px;
   margin-bottom: 20px;
 }
 
-.Assets section,
-.Assets div {
+.ArrowBow section,
+.ArrowBow div {
   padding-left: 32px;
   padding-top: 8px;
 }
 
-.Assets .closebtn {
+.ArrowBow .closebtn {
   position: absolute;
   top: 0;
   left: 25px;
@@ -187,8 +187,8 @@ body {
   text-decoration: none;
 }
 
-/* Right Sidebar Tab #2: Assets */
-#AssetsTab {
+/* Right Sidebar Tab #2: ArrowBow */
+#ArrowBowTab {
   position: fixed;
   top: 60%; /* move further down to prevent overlap */
   right: 0;
@@ -207,7 +207,7 @@ body {
   height: auto;
 }
 
-#AssetsTab:hover {
+#ArrowBowTab:hover {
   background-color: #444;
 }
 
