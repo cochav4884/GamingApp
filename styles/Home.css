@@ -7,14 +7,14 @@ body {
 }
 
 /* ==================== */
-/* Left Sidebar */
+/* Left Sidebar - Lobby */
 .Lobby {
   height: 100%;
   width: 0;
   position: fixed;
-  z-index: 2;
   top: 0;
   left: 0;
+  z-index: 2;
   background-color: #fff;
   overflow-x: hidden;
   padding-top: 60px;
@@ -40,7 +40,6 @@ body {
   top: 0;
   right: 25px;
   font-size: 36px;
-  margin-left: 50px;
   color: #000;
   text-decoration: none;
 }
@@ -53,7 +52,7 @@ body {
   transform: translateY(-50%);
   background-color: #111;
   color: white;
-  padding: 15px 10px 15px 10px; /* top, right, bottom, left */
+  padding: 15px 10px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -69,22 +68,14 @@ body {
 }
 
 /* ==================== */
-/* Right Side Dice Box */
-.dice {
-    border: 2px solid #000;
-    padding: 20px 20px 20px 20px;
-    margin: 25px 25px 25px 25px;
-}
-
-/* ==================== */
 /* Right Sidebar #1 - BackgroundImages */
 .BackgroundImages {
   height: 100%;
   width: 0;
   position: fixed;
-  z-index: 2;
   top: 0;
   right: 0;
+  z-index: 2;
   background-color: #fff;
   overflow-x: hidden;
   padding-top: 60px;
@@ -114,15 +105,15 @@ body {
   text-decoration: none;
 }
 
-/* Right Sidebar Tab #1: Background */
+/* Background Sidebar Tab */
 #BackgroundTab {
   position: fixed;
-  top: 45%; /* move slightly up */
+  top: 7%;
   right: 0;
   transform: translateY(-50%);
   background-color: #111;
   color: white;
-  padding: 15px 10px 15px 25px; /* top, right, bottom, left */
+  padding: 15px 10px 15px 25px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -138,26 +129,43 @@ body {
   background-color: #444;
 }
 
-/* Background Sidebar list items */
-.BackgroundImages section ul li {
-  cursor: pointer;
-  padding: 8px;
-  transition: background-color 0.2s;
+/* Background Thumbnails */
+.BackgroundImages section ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+  list-style: none;
+  padding: 0 32px 32px 32px;
+  margin: 0;
+  overflow-y: auto;
+  max-height: calc(100% - 60px);
 }
 
-.BackgroundImages section ul li:hover {
-  background-color: #ddd; /* highlight on hover */
+.BackgroundImages section ul li img.background-thumb {
+  width: 80px;
+  height: 60px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.BackgroundImages section ul li img.background-thumb:hover {
+  transform: scale(1.1);
+  border-color: #444;
 }
 
 /* ==================== */
-/* Right Sidebar #2 - ArrowBow */
-.ArrowBow {
+/* Right Sidebar #2 - ArrowBow & AxeClub */
+.ArrowBow,
+.AxeClub {
+  left: auto;
   height: 100%;
   width: 0;
   position: fixed;
-  z-index: 2;
   top: 0;
   right: 0;
+  z-index: 2;
   background-color: #fff;
   overflow-x: hidden;
   padding-top: 60px;
@@ -165,7 +173,8 @@ body {
   color: #000;
 }
 
-.ArrowBow .lobby-title {
+.ArrowBow .lobby-title,
+.AxeClub .lobby-title {
   font-size: 24px;
   font-weight: bold;
   padding-left: 32px;
@@ -173,12 +182,15 @@ body {
 }
 
 .ArrowBow section,
-.ArrowBow div {
+.AxeClub section,
+.ArrowBow div,
+.AxeClub div {
   padding-left: 32px;
   padding-top: 8px;
 }
 
-.ArrowBow .closebtn {
+.ArrowBow .closebtn,
+.AxeClub .closebtn {
   position: absolute;
   top: 0;
   left: 25px;
@@ -187,15 +199,19 @@ body {
   text-decoration: none;
 }
 
-/* Right Sidebar Tab #2: ArrowBow */
-#ArrowBowTab {
+.ArrowBow.open {
+  width: 250px; /* width when opened */
+}
+
+/* Right Sidebar Tabs */
+#ArrowBowTab,
+#AxeClubTab {
   position: fixed;
-  top: 60%; /* move further down to prevent overlap */
   right: 0;
   transform: translateY(-50%);
   background-color: #111;
   color: white;
-  padding: 15px 10px 15px 25px; /* top, right, bottom, left */
+  padding: 15px 10px 15px 25px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -207,12 +223,22 @@ body {
   height: auto;
 }
 
-#ArrowBowTab:hover {
+#ArrowBowTab {
+  top: 17%;
+}
+
+#AxeClubTab {
+  top: 27%;
+}
+
+#ArrowBowTab:hover,
+#AxeClubTab:hover {
   background-color: #444;
 }
 
+/* Asset Thumbnails & Placed Assets */
 .asset-icon {
-  width: 20px;       /* sidebar icon size */
+  width: 20px;
   height: 20px;
   object-fit: contain;
   vertical-align: middle;
@@ -220,21 +246,36 @@ body {
 }
 
 .placed-asset-img {
-  width: 20px;       /* matches grid square */
+  width: 20px;
   height: 20px;
   object-fit: contain;
   display: block;
   margin: auto;
-  pointer-events: none; /* allows dragging over */
+  pointer-events: none;
 }
 
+.sidebar-right ul li img.asset-thumb {
+  width: 60px;
+  height: 60px;
+  margin: 4px;
+  cursor: grab;
+  border: 1px solid #999;
+  border-radius: 4px;
+}
+
+#battlefield img.battlefield-asset {
+  width: 50px;
+  height: 50px;
+  cursor: move;
+}
 
 /* ==================== */
 /* Dice Box */
+.dice,
 .diceBox {
-  border: solid #000;
+  border: 2px solid #000;
   padding: 20px;
-  margin: 10px;
+  margin: 10px 25px;
 }
 
 /* ==================== */
@@ -242,38 +283,34 @@ body {
 #main {
   transition: margin 0.5s;
   padding: 20px;
-  margin-left: 60px; /* space for left tab */
-  margin-right: 60px; /* space for right tabs */
+  margin-left: 60px;
+  margin-right: 60px;
 }
 
-/* When left sidebar opens */
 #main.left-open {
   margin-left: 250px;
 }
 
-/* When right sidebar #1 opens */
 #main.right1-open {
   margin-right: 250px;
 }
 
-/* When right sidebar #2 opens */
 #main.right2-open {
   margin-right: 250px;
 }
 
-/* If both right sidebars open, stack them */
 #main.right1-open.right2-open {
   margin-right: 500px;
 }
 
 /* ==================== */
-/* Battlefield container */
+/* Battlefield Container */
 #battlefield {
   position: relative;
   width: 100%;
-  height: 500px; /* adjust height as needed */
-  background-color: #333; /* fallback color */
-  background-size: cover; /* scale the image */
+  height: 500px;
+  background-color: #333;
+  background-size: cover;
   background-position: center;
   border: 2px solid #000;
   margin-top: 20px;
@@ -287,7 +324,7 @@ body {
   width: 100vw;
   height: 100vh;
   z-index: 999;
-  background-color: #fff; /* optional background */
+  background-color: #fff;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -296,46 +333,43 @@ body {
   display: none;
 }
 
-/* Fullscreen & Exit Fullscreen buttons */
+/* Fullscreen Buttons */
 #battlefield button {
   position: absolute;
-  top: 10px;       /* distance from top of battlefield */
-  right: 10px;     /* distance from right edge */
-  z-index: 3;      /* above grid overlay */
+  top: 10px;
+  right: 10px;
+  z-index: 3;
 }
 
-
-/* Grid overlay on top of battlefield */
+/* Grid Overlay */
 .grid-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: auto; /* allow squares to receive drag/drop */
+  pointer-events: auto;
   background-image:
     linear-gradient(to right, rgba(0,0,0,0.3) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0,0,0,0.3) 1px, transparent 1px);
-  background-size: 25px 25px; /* 25px = 5-foot squares */
+  background-size: 25px 25px;
   z-index: 2;
 }
 
-.grid-overlay div {
+.grid-overlay div,
+.grid-square {
   border: 1px solid rgba(255,255,255,0.3);
+  box-sizing: border-box;
 }
 
 .grid-square {
   position: absolute;
   width: 25px;
   height: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-sizing: border-box;
 }
 
 /* ==================== */
 /* Responsive Behavior */
-
-/* Medium screens (tablet) */
 @media screen and (max-width: 992px) {
   #main {
     margin-left: 50px;
@@ -344,46 +378,26 @@ body {
 
   .Lobby,
   .BackgroundImages,
-  .Assets {
+  .ArrowBow,
+  .AxeClub {
     width: 0;
   }
 
   #LobbyTab,
   #BackgroundTab,
-  #AssetsTab {
+  #ArrowBowTab,
+  #AxeClubTab {
     display: block;
   }
 }
 
-/* Small screens (mobile) */
 @media screen and (max-width: 576px) {
   .Lobby,
   .BackgroundImages,
-  .Assets {
+  .ArrowBow,
+  .AxeClub {
     width: 0;
     position: fixed;
     height: 100%;
-  }
-
-  .Lobby {
-    left: 0;
-  }
-
-  .BackgroundImages,
-  .Assets {
-    right: 0;
-  }
-
-  #LobbyTab,
-  #BackgroundTab,
-  #AssetsTab {
-    font-size: 14px;
-    padding: 10px 8px;
-  }
-
-  #main {
-    margin-left: 40px;
-    margin-right: 40px;
-    padding: 15px;
   }
 }
