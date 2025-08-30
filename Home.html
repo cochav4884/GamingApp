@@ -273,9 +273,17 @@
       });
 
       // -------------------- Grid Squares --------------------
-      const gridOverlay = document.querySelector(".grid-overlay");
-      const gridWidth = Math.floor(battlefield.clientWidth / 25);
-      const gridHeight = Math.floor(battlefield.clientHeight / 25);
+      const gridOverlay = document.createElement("div");
+      gridOverlay.id = "gridOverlay";
+      gridOverlay.style.position = "absolute";
+      gridOverlay.style.top = 0;
+      gridOverlay.style.left = 0;
+      gridOverlay.style.width = "100%";
+      gridOverlay.style.height = "100%";
+      document.getElementById("battlefield").appendChild(gridOverlay);
+
+      const gridWidth = 50; // number of squares horizontally
+      const gridHeight = 50; // number of squares vertically
 
       for (let y = 0; y < gridHeight; y++) {
         for (let x = 0; x < gridWidth; x++) {
@@ -284,37 +292,24 @@
           square.dataset.x = x;
           square.dataset.y = y;
 
-          // Position the square
-          square.style.left = `${x * 25}px`;
-          square.style.top = `${y * 25}px`;
-
-          // Drag/drop listeners
           square.addEventListener("dragover", (e) => e.preventDefault());
+
           square.addEventListener("drop", (e) => {
             e.preventDefault();
             const assetId = e.dataTransfer.getData("text/plain");
             const asset = assets.find((a) => a.id == assetId);
-            if (!asset) return;
 
-            // Remove previous placement if any
-            document.querySelectorAll(".placed-asset").forEach((el) => {
-              if (el.dataset.id == assetId) el.remove();
-            });
+            // Remove previous asset if already placed
+            square.innerHTML = "";
 
-            // Place asset
-            const assetDiv = document.createElement("div");
-            assetDiv.classList.add("placed-asset");
-            assetDiv.textContent = asset.name;
-            assetDiv.dataset.id = asset.id;
-            assetDiv.style.position = "absolute";
-            assetDiv.style.width = "100%";
-            assetDiv.style.height = "100%";
-            assetDiv.style.display = "flex";
-            assetDiv.style.alignItems = "center";
-            assetDiv.style.justifyContent = "center";
-            square.appendChild(assetDiv);
+            // Place the icon image in the square
+            const img = document.createElement("img");
+            img.src = asset.image;
+            img.alt = asset.name;
+            img.classList.add("placed-asset-img");
+            square.appendChild(img);
 
-            // Store coordinates
+            // Update asset coordinates
             asset.x = square.dataset.x;
             asset.y = square.dataset.y;
             asset.found = true;
