@@ -9,12 +9,16 @@
     />
     <link rel="stylesheet" href="styles/index.css" />
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Empty favicon to prevent 404 -->
+    <link rel="icon" href="data:," />
     <title>Gaming App</title>
   </head>
   <body>
     <!-- Left Sidebar (Lobby) -->
     <div id="LobbySidebar" class="sidebar-left Lobby">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNavLobby()">&times;</a>
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNavLobby()"
+        >&times;</a
+      >
       <div class="lobby-title">Lobby</div>
       <section>
         Player List
@@ -32,21 +36,29 @@
     </div>
     <div id="LobbyTab" class="sidebar-tab" onclick="openNavLobby()">Lobby</div>
 
-    <!-- Right Sidebars will be generated here -->
+    <!-- Right Sidebars & Tabs Container -->
     <div id="rightSidebarsContainer"></div>
 
-    <!-- Main Content -->
+    <!-- Main Content / Battlefield -->
     <div id="main">
       <h1>Battlefield</h1>
       <div id="battlefield">
         <div id="gridOverlay" class="grid-overlay"></div>
-        <button id="fullscreenBtn" type="button" class="btn btn-secondary">FullScreen</button>
-        <button id="exitFullscreenBtn" type="button" class="btn btn-danger hidden">Exit FullScreen</button>
+        <button id="fullscreenBtn" type="button" class="btn btn-secondary">
+          FullScreen
+        </button>
+        <button
+          id="exitFullscreenBtn"
+          type="button"
+          class="btn btn-danger hidden"
+        >
+          Exit FullScreen
+        </button>
       </div>
       <p>Main content area. Open any sidebar using the tabs.</p>
     </div>
 
-    <!-- Scripts -->
+    <!-- Your main JS -->
     <script type="module" src="js/main.js"></script>
   </body>
 </html>

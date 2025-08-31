@@ -1,50 +1,29 @@
-import { arrowbowAssets, axeClubAssets } from './assets.js';
-
-function populateSidebar(assetArray, listId) {
-  const list = document.getElementById(listId);
-  list.innerHTML = "";
+export function populateSidebar(assetArray, listId, isBackground = false, battlefield) {
+  const ul = document.getElementById(listId);
+  if (!ul) return;
+  ul.innerHTML = "";
 
   assetArray.forEach(asset => {
     const li = document.createElement("li");
     const img = document.createElement("img");
     img.src = asset.image;
     img.alt = asset.name;
-    img.draggable = true;
     img.classList.add("asset-thumb");
 
-    // Drag event
-    img.addEventListener("dragstart", (e) => {
-      e.dataTransfer.setData("text/plain", asset.image);
-    });
+    if (isBackground && battlefield) {
+      img.addEventListener("click", () => {
+        battlefield.style.backgroundImage = `url(${asset.image})`;
+        battlefield.style.backgroundSize = "cover";
+        battlefield.style.backgroundPosition = "center";
+      });
+    } else {
+      img.draggable = true;
+      img.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("application/json", JSON.stringify(asset));
+      });
+    }
 
     li.appendChild(img);
-    list.appendChild(li);
+    ul.appendChild(li);
   });
 }
-
-// Populate all sidebars
-populateSidebar(arrowbowAssets, "arrowbowList");
-populateSidebar(axeClubAssets, "axeclubList");
-
-// Battlefield drop logic
-const battlefield = document.getElementById("battlefield");
-
-battlefield.addEventListener("dragover", (e) => {
-  e.preventDefault();
-});
-
-battlefield.addEventListener("drop", (e) => {
-  e.preventDefault();
-  const src = e.dataTransfer.getData("text/plain");
-  const x = e.offsetX;
-  const y = e.offsetY;
-
-  const img = document.createElement("img");
-  img.src = src;
-  img.style.position = "absolute";
-  img.style.left = `${x}px`;
-  img.style.top = `${y}px`;
-  img.classList.add("battlefield-asset");
-
-  battlefield.appendChild(img);
-});

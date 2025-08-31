@@ -1,136 +1,79 @@
-// =====================
-// main.js
-// =====================
+// -------------------- main.js --------------------
+import { backgroundAssets } from "../js/background.js";
+import { arrowBowAssets } from "./assets/arrowBowAssets.js";
+import { axeClubAssets } from "./assets/axeClubAssets.js";
+console.log(axeClubAssets);
+import { daggerAssets } from "./assets/daggerAssets.js";
+import { gemstoneAssets } from "./assets/gemstoneAssets.js";
+import { magicStaffAssets } from "./assets/magicStaffAssets.js";
+import { mapScrollAssets } from "./assets/mapScrollAssets.js";
+import { potionAssets } from "./assets/potionAssets.js";
+import { shieldAssets } from "./assets/shieldAssets.js";
+import { swordAssets } from "./assets/swordAssets.js";
+import { treasureAssets } from "./assets/treasureAssets.js";
 
-// --------------------
-// Dummy Data (replace later with real imports)
-// --------------------
-const backgroundImages = [
-  {
-    name: "Grasslands",
-    image: "https://via.placeholder.com/300x200/6ab04c/fff",
-  },
-  { name: "Dungeon", image: "https://via.placeholder.com/300x200/2f3640/fff" },
-];
+import { populateSidebar } from "./dragdrop.js";
 
-const dummyAssets = [
-  { name: "Asset1", image: "https://via.placeholder.com/60" },
-  { name: "Asset2", image: "https://via.placeholder.com/60" },
-];
-
-// --------------------
-// Asset categories (excluding Background)
-// --------------------
+// -------------------- Categories --------------------
 const categories = [
-  { name: "ArrowBow", assets: dummyAssets },
-  { name: "AxeClub", assets: dummyAssets },
-  { name: "Sword", assets: dummyAssets },
-  // …add more as needed
+  { name: "Background", assets: backgroundAssets, isBackground: true },
+  { name: "ArrowBow", assets: arrowBowAssets },
+  { name: "AxeClub", assets: axeClubAssets },
+  { name: "Dagger", assets: daggerAssets },
+  { name: "Gemstone", assets: gemstoneAssets },
+  { name: "MagicStaff", assets: magicStaffAssets },
+  { name: "MapScroll", assets: mapScrollAssets },
+  { name: "Potion", assets: potionAssets },
+  { name: "Shield", assets: shieldAssets },
+  { name: "Sword", assets: swordAssets },
+  { name: "Treasure", assets: treasureAssets },
 ];
 
-// --------------------
-// DOMContentLoaded
-// --------------------
 document.addEventListener("DOMContentLoaded", () => {
   const rightContainer = document.getElementById("rightSidebarsContainer");
   const battlefield = document.getElementById("battlefield");
   const fullscreenBtn = document.getElementById("fullscreenBtn");
   const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
 
-  // =================================================
-  // BACKGROUND SIDEBAR (special: click to set)
-  // =================================================
-  createSidebar("Background", backgroundImages, true);
-
-  // =================================================
-  // ASSET SIDEBARS (drag & drop)
-  // =================================================
+  // -------------------- Create Right Sidebars & Tabs --------------------
   categories.forEach((cat, index) => {
-    createSidebar(cat.name, cat.assets, false, index + 1);
-  });
-
-  // =================================================
-  // Create Sidebar function
-  // =================================================
-  function createSidebar(name, assets, isBackground = false, rightIndex = 1) {
-    const sidebarId = name + "Sidebar";
-    const tabId = name + "Tab";
-    const rightClass = "right" + rightIndex;
+    const sidebarId = cat.name + "Sidebar";
+    const tabId = cat.name + "Tab";
+    const rightClass = "right" + (index + 1);
 
     // Create tab
     const tab = document.createElement("div");
     tab.id = tabId;
     tab.className = "sidebar-tab-right";
-    tab.innerText = name.replace(/([A-Z])/g, " $1").trim();
-    tab.addEventListener("click", () => openNav(name, rightClass));
+    tab.innerText = cat.name.replace(/([A-Z])/g, " $1").trim();
+    tab.addEventListener("click", () => openNav(cat.name, rightClass));
     rightContainer.appendChild(tab);
 
     // Create sidebar
     const sidebar = document.createElement("div");
     sidebar.id = sidebarId;
-    sidebar.className = `sidebar-right ${name}`;
+    sidebar.className = `sidebar-right ${cat.name}`;
     sidebar.innerHTML = `
       <a href="#" class="closebtn">&times;</a>
-      <div class="lobby-title">${name.replace(/([A-Z])/g, " $1").trim()}</div>
+      <div class="lobby-title">${cat.name.replace(/([A-Z])/g, " $1").trim()}</div>
       <section>
-        Choose ${isBackground ? "Background" : "Asset"}
-        <ul id="${name.toLowerCase()}List"></ul>
+        Choose Asset
+        <ul id="${cat.name.toLowerCase()}List"></ul>
       </section>
     `;
     rightContainer.appendChild(sidebar);
 
     // Close button
-    sidebar
-      .querySelector(".closebtn")
-      .addEventListener("click", () => closeNav(name, rightClass));
+    sidebar.querySelector(".closebtn")
+      .addEventListener("click", () => closeNav(cat.name, rightClass));
 
-    // Populate assets
-    populateSidebar(assets, `${name.toLowerCase()}List`, isBackground);
-  }
+    // Populate assets AFTER sidebar exists
+    populateSidebar(cat.assets, `${cat.name.toLowerCase()}List`, battlefield, cat.isBackground);
+  });
 
-  // =================================================
-  // Populate Sidebar
-  // =================================================
-  function populateSidebar(assetArray, ulId, isBackground = false) {
-    const ul = document.getElementById(ulId);
-    if (!ul) return;
-    ul.innerHTML = "";
-
-    assetArray.forEach((asset) => {
-      const li = document.createElement("li");
-      const img = document.createElement("img");
-      img.src = asset.image;
-      img.alt = asset.name;
-      img.classList.add("asset-thumb");
-
-      if (isBackground) {
-        img.classList.add("background");
-        img.setAttribute("draggable", "false"); // explicitly disable dragging
-        img.addEventListener("click", () => {
-          battlefield.style.backgroundImage = `url(${asset.image})`;
-          battlefield.style.backgroundSize = "cover";
-          battlefield.style.backgroundPosition = "center";
-        });
-      } else {
-        img.classList.add("asset");
-        img.draggable = true;
-        img.addEventListener("dragstart", (e) => {
-          e.dataTransfer.setData("application/json", JSON.stringify(asset));
-        });
-      }
-
-      li.appendChild(img);
-      ul.appendChild(li);
-    });
-  }
-
-  // =================================================
-  // Left Lobby
-  // =================================================
+  // -------------------- Left Lobby --------------------
   const lobbyTab = document.getElementById("LobbyTab");
   const lobbySidebar = document.getElementById("LobbySidebar");
-
-  lobbyTab.addEventListener("click", openNavLobby);
 
   function openNavLobby() {
     lobbySidebar.style.width = "250px";
@@ -144,14 +87,16 @@ document.addEventListener("DOMContentLoaded", () => {
     lobbyTab.style.display = "block";
   }
 
-  lobbySidebar
-    .querySelector(".closebtn")
-    .addEventListener("click", closeNavLobby);
+  lobbyTab.addEventListener("click", openNavLobby);
+  lobbySidebar.querySelector(".closebtn").addEventListener("click", closeNavLobby);
 
-  // =================================================
-  // Right Sidebars open/close
-  // =================================================
+  // -------------------- Right Sidebars Open/Close --------------------
   function openNav(id, className) {
+    // Close all other sidebars
+    categories.forEach(cat => {
+      if (cat.name !== id) closeNav(cat.name, "right" + (categories.indexOf(cat) + 1));
+    });
+
     document.getElementById(id + "Sidebar").style.width = "250px";
     document.getElementById("main").classList.add(className + "-open");
     document.getElementById(id + "Tab").style.display = "none";
@@ -166,9 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.openNav = openNav;
   window.closeNav = closeNav;
 
-  // =================================================
-  // Battlefield drag & drop (only assets, not backgrounds)
-  // =================================================
+  // -------------------- Battlefield Drag & Drop --------------------
   battlefield.addEventListener("dragover", (e) => e.preventDefault());
   battlefield.addEventListener("drop", (e) => {
     e.preventDefault();
@@ -184,9 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     battlefield.appendChild(img);
   });
 
-  // =================================================
-  // Fullscreen toggle
-  // =================================================
+  // -------------------- Fullscreen --------------------
   fullscreenBtn.addEventListener("click", () => {
     battlefield.classList.add("fullscreen");
     fullscreenBtn.style.display = "none";
