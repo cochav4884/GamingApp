@@ -68,10 +68,10 @@ body {
 }
 
 /* ==================== */
-/* Right Sidebar #1 - BackgroundImages */
-.BackgroundImages {
+/* Generic Right Sidebars */
+.sidebar-right {
   height: 100%;
-  width: 0;
+  width: 0; /* closed by default */
   position: fixed;
   top: 0;
   right: 0;
@@ -83,20 +83,20 @@ body {
   color: #000;
 }
 
-.BackgroundImages .lobby-title {
+.sidebar-right .lobby-title {
   font-size: 24px;
   font-weight: bold;
   padding-left: 32px;
   margin-bottom: 20px;
 }
 
-.BackgroundImages section,
-.BackgroundImages div {
+.sidebar-right section,
+.sidebar-right div {
   padding-left: 32px;
   padding-top: 8px;
 }
 
-.BackgroundImages .closebtn {
+.sidebar-right .closebtn {
   position: absolute;
   top: 0;
   left: 25px;
@@ -105,12 +105,10 @@ body {
   text-decoration: none;
 }
 
-/* Background Sidebar Tab */
-#BackgroundTab {
+/* Generic Right Tabs */
+.sidebar-tab-right {
   position: fixed;
-  top: 7%;
   right: 0;
-  transform: translateY(-50%);
   background-color: #111;
   color: white;
   padding: 15px 10px 15px 25px;
@@ -125,14 +123,26 @@ body {
   height: auto;
 }
 
-#BackgroundTab:hover {
+.sidebar-tab-right:hover {
   background-color: #444;
 }
 
-/* Background Thumbnails */
-.BackgroundImages section ul {
+/* Stagger right tabs automatically */
+.sidebar-tab-right:nth-of-type(1) { top: 7%; }
+.sidebar-tab-right:nth-of-type(2) { top: 17%; }
+.sidebar-tab-right:nth-of-type(3) { top: 27%; }
+.sidebar-tab-right:nth-of-type(4) { top: 37%; }
+.sidebar-tab-right:nth-of-type(5) { top: 47%; }
+.sidebar-tab-right:nth-of-type(6) { top: 57%; }
+.sidebar-tab-right:nth-of-type(7) { top: 67%; }
+.sidebar-tab-right:nth-of-type(8) { top: 77%; }
+.sidebar-tab-right:nth-of-type(9) { top: 87%; }
+.sidebar-tab-right:nth-of-type(10) { top: 97%; }
+
+/* Right Sidebar UL/Assets */
+.sidebar-right ul {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
   gap: 10px;
   list-style: none;
   padding: 0 32px 32px 32px;
@@ -141,102 +151,25 @@ body {
   max-height: calc(100% - 60px);
 }
 
-.BackgroundImages section ul li img.background-thumb {
-  width: 80px;
-  height: 60px;
-  border: 1px solid #999;
-  border-radius: 4px;
+/* Asset thumbnails (draggable) */
+.asset-thumb.asset {
+  cursor: grab;
+}
+
+/* Background thumbnails (clickable, not draggable) */
+.asset-thumb.background {
   cursor: pointer;
-  transition: transform 0.2s, border-color 0.2s;
+  -webkit-user-select: none;
+  user-select: none;   /* Prevent accidental text/image selection */
 }
 
-.BackgroundImages section ul li img.background-thumb:hover {
-  transform: scale(1.1);
-  border-color: #444;
+/* Placed Assets on Battlefield */
+#battlefield img.battlefield-asset {
+  width: 50px;
+  height: 50px;
+  cursor: move;
 }
 
-/* ==================== */
-/* Right Sidebar #2 - ArrowBow & AxeClub */
-.ArrowBow,
-.AxeClub {
-  left: auto;
-  height: 100%;
-  width: 0;
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 2;
-  background-color: #fff;
-  overflow-x: hidden;
-  padding-top: 60px;
-  transition: 0.5s;
-  color: #000;
-}
-
-.ArrowBow .lobby-title,
-.AxeClub .lobby-title {
-  font-size: 24px;
-  font-weight: bold;
-  padding-left: 32px;
-  margin-bottom: 20px;
-}
-
-.ArrowBow section,
-.AxeClub section,
-.ArrowBow div,
-.AxeClub div {
-  padding-left: 32px;
-  padding-top: 8px;
-}
-
-.ArrowBow .closebtn,
-.AxeClub .closebtn {
-  position: absolute;
-  top: 0;
-  left: 25px;
-  font-size: 36px;
-  color: #000;
-  text-decoration: none;
-}
-
-.ArrowBow.open {
-  width: 250px; /* width when opened */
-}
-
-/* Right Sidebar Tabs */
-#ArrowBowTab,
-#AxeClubTab {
-  position: fixed;
-  right: 0;
-  transform: translateY(-50%);
-  background-color: #111;
-  color: white;
-  padding: 15px 10px 15px 25px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 3;
-  border-radius: 5px 0 0 5px;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transition: 0.3s;
-  height: auto;
-}
-
-#ArrowBowTab {
-  top: 17%;
-}
-
-#AxeClubTab {
-  top: 27%;
-}
-
-#ArrowBowTab:hover,
-#AxeClubTab:hover {
-  background-color: #444;
-}
-
-/* Asset Thumbnails & Placed Assets */
 .asset-icon {
   width: 20px;
   height: 20px;
@@ -252,21 +185,6 @@ body {
   display: block;
   margin: auto;
   pointer-events: none;
-}
-
-.sidebar-right ul li img.asset-thumb {
-  width: 60px;
-  height: 60px;
-  margin: 4px;
-  cursor: grab;
-  border: 1px solid #999;
-  border-radius: 4px;
-}
-
-#battlefield img.battlefield-asset {
-  width: 50px;
-  height: 50px;
-  cursor: move;
 }
 
 /* ==================== */
@@ -291,16 +209,10 @@ body {
   margin-left: 250px;
 }
 
-#main.right1-open {
+/* Shift main content when any right sidebar is open */
+#main[class*="right"] {
   margin-right: 250px;
-}
-
-#main.right2-open {
-  margin-right: 250px;
-}
-
-#main.right1-open.right2-open {
-  margin-right: 500px;
+  transition: margin 0.5s;
 }
 
 /* ==================== */
@@ -341,6 +253,7 @@ body {
   z-index: 3;
 }
 
+/* ==================== */
 /* Grid Overlay */
 .grid-overlay {
   position: absolute;
@@ -377,25 +290,19 @@ body {
   }
 
   .Lobby,
-  .BackgroundImages,
-  .ArrowBow,
-  .AxeClub {
+  .sidebar-right {
     width: 0;
   }
 
   #LobbyTab,
-  #BackgroundTab,
-  #ArrowBowTab,
-  #AxeClubTab {
+  .sidebar-tab-right {
     display: block;
   }
 }
 
 @media screen and (max-width: 576px) {
   .Lobby,
-  .BackgroundImages,
-  .ArrowBow,
-  .AxeClub {
+  .sidebar-right {
     width: 0;
     position: fixed;
     height: 100%;
