@@ -1,6 +1,6 @@
 
  // -------------------- Axe Club Assets.js --------------------
-  export const axeClubAssets = [
+  export const axeclubAssets = [
     { id: 1, name: "axe_01", image: "/assets/axeclubImages/axe_01.png", x: null, y: null, found: false },
     { id: 2, name: "axe_02", image: "assets/axeclubImages/axe_02.png", x: null, y: null, found: false },
     { id: 3, name: "axe_03", image: "assets/axeclubImages/axe_03.png", x: null, y: null, found: false },

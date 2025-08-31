@@ -151,16 +151,23 @@ body {
   max-height: calc(100% - 60px);
 }
 
-/* Asset thumbnails (draggable) */
-.asset-thumb.asset {
+/* ==================== */
+/* Asset thumbnails */
+.asset-thumb {
+  width: 60px;         /* thumbnail size */
+  height: 60px;
+  object-fit: cover;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   cursor: grab;
 }
 
-/* Background thumbnails (clickable, not draggable) */
+/* Background thumbnails (clickable) */
 .asset-thumb.background {
   cursor: pointer;
   -webkit-user-select: none;
-  user-select: none;   /* Prevent accidental text/image selection */
+  user-select: none;
 }
 
 /* Placed Assets on Battlefield */
