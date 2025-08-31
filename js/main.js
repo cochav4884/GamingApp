@@ -1,8 +1,7 @@
 // -------------------- main.js --------------------
 import { backgroundAssets } from "../js/background.js";
 import { arrowBowAssets } from "./assets/arrowBowAssets.js";
-import { axeClubAssets } from "./assets/axeClubAssets.js";
-console.log(axeClubAssets);
+import { axeclubAssets } from "./assets/axeclubAssets.js";
 import { daggerAssets } from "./assets/daggerAssets.js";
 import { gemstoneAssets } from "./assets/gemstoneAssets.js";
 import { magicStaffAssets } from "./assets/magicStaffAssets.js";
@@ -18,7 +17,7 @@ import { populateSidebar } from "./dragdrop.js";
 const categories = [
   { name: "Background", assets: backgroundAssets, isBackground: true },
   { name: "ArrowBow", assets: arrowBowAssets },
-  { name: "AxeClub", assets: axeClubAssets },
+  { name: "Axeclub", assets: axeclubAssets },
   { name: "Dagger", assets: daggerAssets },
   { name: "Gemstone", assets: gemstoneAssets },
   { name: "MagicStaff", assets: magicStaffAssets },
