@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .addEventListener("click", () => closeNav(cat.name, rightClass));
 
     // Populate assets AFTER sidebar exists
-    populateSidebar(cat.assets, `${cat.name.toLowerCase()}List`, battlefield, cat.isBackground);
+    populateSidebar(cat.assets, `${cat.name.toLowerCase()}List`, cat.isBackground, battlefield);
   });
 
   // -------------------- Left Lobby --------------------
