@@ -11,6 +11,8 @@ import { swordAssets } from "./assets/swordAssets.js";
 import { treasureAssets } from "./assets/treasureAssets.js";
 
 import { populateSidebar } from "./dragdrop.js";
+import { setupDiceUI } from "./dice.js";
+import { setup3DDice } from "../js/diec3D.js";
 
 // Categories for right tabs only
 const rightCategories = [
@@ -27,11 +29,33 @@ const rightCategories = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
+  // -------------------- DOM Elements --------------------
   const tabContainer = document.getElementById("sidebarTabContainer"); // right tabs container
   const panelsContainer = document.getElementById("rightPanels");
   const battlefield = document.getElementById("battlefield");
   const fullscreenBtn = document.getElementById("fullscreenBtn");
   const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
+
+const diceOptions = document.getElementById("diceOptions");
+const rollBtn = document.getElementById("rollBtn");
+const diceValue = document.getElementById("diceValue");
+
+// Only create thumbnails
+setupDiceUI(diceOptions);
+
+// Setup 3D dice
+const dice3D = setup3DDice(battlefield, (value) => {
+  diceValue.innerText = value;
+});
+
+// Roll button
+rollBtn.addEventListener("click", () => {
+  const selectedDie = document.querySelector(".dice-thumb.selected");
+  if (!selectedDie) return alert("Select a die first!");
+  const dieName = selectedDie.dataset.die;
+  dice3D.rollByName(dieName);
+});
+
 
   // -------------------- Right Sidebars + Tabs --------------------
   rightCategories.forEach((cat, index) => {
@@ -66,12 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebar
       .querySelector(".closebtn")
       .addEventListener("click", () => closeRightSidebar(cat.name, rightClass));
-    populateSidebar(
-      cat.assets,
-      `${cat.name.toLowerCase()}List`,
-      false,
-      battlefield
-    );
+
+    populateSidebar(cat.assets, `${cat.name.toLowerCase()}List`, false, battlefield);
   });
 
   // -------------------- Left Lobby --------------------
@@ -91,14 +111,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (lobbyTab)
-    lobbyTab.addEventListener("click", () =>
-      openLeftSidebar(lobbySidebar, lobbyTab)
-    );
+    lobbyTab.addEventListener("click", () => openLeftSidebar(lobbySidebar, lobbyTab));
   const lbClose = lobbySidebar.querySelector(".closebtn");
-  if (lbClose)
-    lbClose.addEventListener("click", () =>
-      closeLeftSidebar(lobbySidebar, lobbyTab)
-    );
+  if (lbClose) lbClose.addEventListener("click", () => closeLeftSidebar(lobbySidebar, lobbyTab));
 
   // -------------------- Left Background --------------------
   const bgTab = document.getElementById("BackgroundTab");
@@ -106,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const bgList = document.getElementById("backgroundList");
 
   function populateBackgrounds() {
-    bgList.innerHTML = ""; // clear previous thumbnails
+    bgList.innerHTML = "";
     backgroundAssets.forEach((asset) => {
       const li = document.createElement("li");
       const img = document.createElement("img");
@@ -137,21 +152,16 @@ document.addEventListener("DOMContentLoaded", () => {
     tab.style.display = "block";
   }
 
-  bgTab.addEventListener("click", () =>
-    openBackgroundSidebar(bgSidebar, bgTab)
+  bgTab.addEventListener("click", () => openBackgroundSidebar(bgSidebar, bgTab));
+  bgSidebar.querySelector(".closebtn").addEventListener("click", () =>
+    closeBackgroundSidebar(bgSidebar, bgTab)
   );
-  bgSidebar
-    .querySelector(".closebtn")
-    .addEventListener("click", () => closeBackgroundSidebar(bgSidebar, bgTab));
 
   // -------------------- Right Sidebars Open/Close --------------------
   function openRightSidebar(id, className) {
     rightCategories.forEach((cat) => {
       if (cat.name !== id)
-        closeRightSidebar(
-          cat.name,
-          "right" + (rightCategories.indexOf(cat) + 1)
-        );
+        closeRightSidebar(cat.name, "right" + (rightCategories.indexOf(cat) + 1));
     });
     const sidebarEl = document.getElementById(id + "Sidebar");
     if (sidebarEl) sidebarEl.style.width = "250px";
@@ -184,10 +194,8 @@ document.addEventListener("DOMContentLoaded", () => {
       img.classList.add("battlefield-asset");
 
       const rect = battlefield.getBoundingClientRect();
-      let x = e.clientX - rect.left - 12.5; // center in 25px square
+      let x = e.clientX - rect.left - 12.5;
       let y = e.clientY - rect.top - 12.5;
-
-      // Snap to nearest 25px grid
       x = Math.round(x / 25) * 25;
       y = Math.round(y / 25) * 25;
 
@@ -204,7 +212,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // -------------------- Make assets draggable inside battlefield --------------------
   battlefield.addEventListener("mousedown", (e) => {
     const target = e.target;
     if (!target.classList.contains("battlefield-asset")) return;
@@ -217,8 +224,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function onMouseMove(moveEvent) {
       let x = moveEvent.clientX - rect.left - offsetX;
       let y = moveEvent.clientY - rect.top - offsetY;
-
-      // Snap to nearest 25px grid
       x = Math.round(x / 25) * 25;
       y = Math.round(y / 25) * 25;
 
@@ -235,101 +240,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("mouseup", onMouseUp);
   });
 
-  // ======= Dice Setup =======
-  const diceTypes = [
-    { name: "d4", sides: 4, color: "#f44336" },
-    { name: "d6", sides: 6, color: "#2196f3" },
-    { name: "d8", sides: 8, color: "#4caf50" },
-    { name: "d10", sides: 10, color: "#ff9800" },
-    { name: "d20", sides: 20, color: "#9c27b0" },
-    { name: "d50", sides: 50, color: "#795548" },
-  ];
-
-  const diceOptions = document.getElementById("diceOptions");
-  const rollBtn = document.getElementById("rollBtn");
-  const diceValue = document.getElementById("diceValue");
-
-  let selectedDie = null;
-
-  // Dice roll sound (optional)
-  const diceSound = new Audio("dice-roll.mp3");
-
-  // Populate dice thumbnails
-  diceTypes.forEach((die) => {
-    const div = document.createElement("div");
-    div.className = "dice-thumb";
-    div.innerText = die.name;
-    div.dataset.sides = die.sides;
-    div.style.backgroundColor = die.color;
-
-    div.addEventListener("click", () => {
-      document
-        .querySelectorAll(".dice-thumb")
-        .forEach((d) => d.classList.remove("selected"));
-      div.classList.add("selected");
-      selectedDie = die;
-    });
-
-    diceOptions.appendChild(div);
-  });
-
-  // Roll button click
-  rollBtn.addEventListener("click", () => {
-    if (!selectedDie) return alert("Select a die first!");
-
-    const diceEl = document.createElement("div");
-    diceEl.className = "rolling-dice";
-    diceEl.style.left = "10px";
-    diceEl.style.top = "10px";
-    diceEl.style.backgroundColor = selectedDie.color;
-    diceEl.innerText = selectedDie.name;
-    battlefield.appendChild(diceEl);
-
-    if (diceSound) {
-      diceSound.currentTime = 0;
-      diceSound.play();
-    }
-
-    const sides = selectedDie.sides;
-    let rollValue = 1;
-
-    let rollInterval = setInterval(() => {
-      rollValue = Math.floor(Math.random() * sides) + 1;
-      diceEl.innerText = rollValue;
-      const offsetX = (Math.random() - 0.5) * 10;
-      const offsetY = (Math.random() - 0.5) * 10;
-      const rotate = (Math.random() - 0.5) * 20;
-      diceEl.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${rotate}deg)`;
-    }, 50);
-
-    setTimeout(() => {
-      clearInterval(rollInterval);
-      const maxX = battlefield.clientWidth - 30;
-      const maxY = battlefield.clientHeight - 30;
-      const targetX = Math.random() * maxX;
-      const targetY = Math.random() * maxY;
-
-      diceEl.style.transition = "transform 1s cubic-bezier(.36,.07,.19,.97)";
-      diceEl.style.transform = `translate(${targetX}px, ${targetY}px) rotate(360deg)`;
-
-      setTimeout(() => {
-        diceEl.style.transition =
-          "transform 0.5s cubic-bezier(.68,-0.55,.27,1.55)";
-        diceEl.style.transform = "translate(0px, 0px) rotate(0deg)";
-
-        setTimeout(() => {
-          battlefield.removeChild(diceEl);
-          diceValue.innerText = rollValue;
-        }, 500);
-      }, 1000);
-    }, 1000);
-  });
-
   // -------------------- Fullscreen --------------------
   fullscreenBtn.addEventListener("click", () => {
     if (battlefield.requestFullscreen) battlefield.requestFullscreen();
-    else if (battlefield.webkitRequestFullscreen)
-      battlefield.webkitRequestFullscreen();
+    else if (battlefield.webkitRequestFullscreen) battlefield.webkitRequestFullscreen();
     else if (battlefield.msRequestFullscreen) battlefield.msRequestFullscreen();
     fullscreenBtn.style.display = "none";
     exitFullscreenBtn.style.display = "block";
