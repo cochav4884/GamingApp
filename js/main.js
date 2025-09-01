@@ -1,4 +1,3 @@
-// -------------------- main.js --------------------
 import { backgroundAssets } from "../js/background.js";
 import { arrowBowAssets } from "./assets/arrowBowAssets.js";
 import { axeclubAssets } from "./assets/axeclubAssets.js";
@@ -13,9 +12,8 @@ import { treasureAssets } from "./assets/treasureAssets.js";
 
 import { populateSidebar } from "./dragdrop.js";
 
-// -------------------- Categories --------------------
-const categories = [
-  { name: "Background", assets: backgroundAssets, isBackground: true },
+// Categories for right tabs only
+const rightCategories = [
   { name: "ArrowBow", assets: arrowBowAssets },
   { name: "Axeclub", assets: axeclubAssets },
   { name: "Dagger", assets: daggerAssets },
@@ -29,13 +27,14 @@ const categories = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
-  const rightContainer = document.getElementById("rightSidebarsContainer");
+  const tabContainer = document.getElementById("sidebarTabContainer"); // right tabs container
+  const panelsContainer = document.getElementById("rightPanels");
   const battlefield = document.getElementById("battlefield");
   const fullscreenBtn = document.getElementById("fullscreenBtn");
   const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
 
-  // -------------------- Create Right Sidebars & Tabs --------------------
-  categories.forEach((cat, index) => {
+  // -------------------- Right Sidebars + Tabs --------------------
+  rightCategories.forEach((cat, index) => {
     const sidebarId = cat.name + "Sidebar";
     const tabId = cat.name + "Tab";
     const rightClass = "right" + (index + 1);
@@ -43,99 +42,219 @@ document.addEventListener("DOMContentLoaded", () => {
     // Create tab
     const tab = document.createElement("div");
     tab.id = tabId;
-    tab.className = "sidebar-tab-right";
+    tab.className = "sidebar-tab";
     tab.innerText = cat.name.replace(/([A-Z])/g, " $1").trim();
-    tab.addEventListener("click", () => openNav(cat.name, rightClass));
-    rightContainer.appendChild(tab);
+    tab.addEventListener("click", () => openRightSidebar(cat.name, rightClass));
+    tabContainer.appendChild(tab);
 
-    // Create sidebar
+    // Create sidebar panel
     const sidebar = document.createElement("div");
     sidebar.id = sidebarId;
     sidebar.className = `sidebar-right ${cat.name}`;
     sidebar.innerHTML = `
       <a href="#" class="closebtn">&times;</a>
-      <div class="lobby-title">${cat.name.replace(/([A-Z])/g, " $1").trim()}</div>
+      <div class="lobby-title">${cat.name
+        .replace(/([A-Z])/g, " $1")
+        .trim()}</div>
       <section>
         Choose Asset
         <ul id="${cat.name.toLowerCase()}List"></ul>
       </section>
     `;
-    rightContainer.appendChild(sidebar);
+    panelsContainer.appendChild(sidebar);
 
-    // Close button
-    sidebar.querySelector(".closebtn")
-      .addEventListener("click", () => closeNav(cat.name, rightClass));
-
-    // Populate assets AFTER sidebar exists
-    populateSidebar(cat.assets, `${cat.name.toLowerCase()}List`, cat.isBackground, battlefield);
+    sidebar
+      .querySelector(".closebtn")
+      .addEventListener("click", () => closeRightSidebar(cat.name, rightClass));
+    populateSidebar(
+      cat.assets,
+      `${cat.name.toLowerCase()}List`,
+      false,
+      battlefield
+    );
   });
 
   // -------------------- Left Lobby --------------------
   const lobbyTab = document.getElementById("LobbyTab");
   const lobbySidebar = document.getElementById("LobbySidebar");
 
-  function openNavLobby() {
-    lobbySidebar.style.width = "250px";
+  function openLeftSidebar(sidebar, tab) {
+    sidebar.style.width = "250px";
     document.getElementById("main").classList.add("left-open");
-    lobbyTab.style.display = "none";
+    tab.style.display = "none";
   }
 
-  function closeNavLobby() {
-    lobbySidebar.style.width = "0";
+  function closeLeftSidebar(sidebar, tab) {
+    sidebar.style.width = "0";
     document.getElementById("main").classList.remove("left-open");
-    lobbyTab.style.display = "block";
+    tab.style.display = "block";
   }
 
-  lobbyTab.addEventListener("click", openNavLobby);
-  lobbySidebar.querySelector(".closebtn").addEventListener("click", closeNavLobby);
+  if (lobbyTab)
+    lobbyTab.addEventListener("click", () =>
+      openLeftSidebar(lobbySidebar, lobbyTab)
+    );
+  const lbClose = lobbySidebar.querySelector(".closebtn");
+  if (lbClose)
+    lbClose.addEventListener("click", () =>
+      closeLeftSidebar(lobbySidebar, lobbyTab)
+    );
+
+  // -------------------- Left Background --------------------
+  const bgTab = document.getElementById("BackgroundTab");
+  const bgSidebar = document.getElementById("BackgroundSidebar");
+  const bgList = document.getElementById("backgroundList");
+
+  function populateBackgrounds() {
+    bgList.innerHTML = ""; // clear previous thumbnails
+    backgroundAssets.forEach(asset => {
+      const li = document.createElement("li");
+      const img = document.createElement("img");
+      img.src = asset.image;
+      img.alt = asset.name;
+      img.className = "asset-thumb background";
+      img.style.cursor = "pointer";
+      img.addEventListener("click", () => {
+        battlefield.style.backgroundImage = `url(${asset.image})`;
+        battlefield.style.backgroundSize = "cover";
+        battlefield.style.backgroundPosition = "center";
+      });
+      li.appendChild(img);
+      bgList.appendChild(li);
+    });
+  }
+
+  function openBackgroundSidebar(sidebar, tab) {
+    sidebar.style.width = "250px";
+    document.getElementById("main").classList.add("left-open");
+    tab.style.display = "none";
+    populateBackgrounds();
+  }
+
+  function closeBackgroundSidebar(sidebar, tab) {
+    sidebar.style.width = "0";
+    document.getElementById("main").classList.remove("left-open");
+    tab.style.display = "block";
+  }
+
+  bgTab.addEventListener("click", () => openBackgroundSidebar(bgSidebar, bgTab));
+  bgSidebar.querySelector(".closebtn").addEventListener("click", () =>
+    closeBackgroundSidebar(bgSidebar, bgTab)
+  );
 
   // -------------------- Right Sidebars Open/Close --------------------
-  function openNav(id, className) {
-    // Close all other sidebars
-    categories.forEach(cat => {
-      if (cat.name !== id) closeNav(cat.name, "right" + (categories.indexOf(cat) + 1));
+  function openRightSidebar(id, className) {
+    rightCategories.forEach((cat) => {
+      if (cat.name !== id)
+        closeRightSidebar(
+          cat.name,
+          "right" + (rightCategories.indexOf(cat) + 1)
+        );
     });
-
-    document.getElementById(id + "Sidebar").style.width = "250px";
+    const sidebarEl = document.getElementById(id + "Sidebar");
+    if (sidebarEl) sidebarEl.style.width = "250px";
     document.getElementById("main").classList.add(className + "-open");
-    document.getElementById(id + "Tab").style.display = "none";
+    const tabEl = document.getElementById(id + "Tab");
+    if (tabEl) tabEl.style.display = "none";
   }
 
-  function closeNav(id, className) {
-    document.getElementById(id + "Sidebar").style.width = "0";
+  function closeRightSidebar(id, className) {
+    const sidebarEl = document.getElementById(id + "Sidebar");
+    if (sidebarEl) sidebarEl.style.width = "0";
     document.getElementById("main").classList.remove(className + "-open");
-    document.getElementById(id + "Tab").style.display = "block";
+    const tabEl = document.getElementById(id + "Tab");
+    if (tabEl) tabEl.style.display = "block";
   }
 
-  window.openNav = openNav;
-  window.closeNav = closeNav;
+  window.openNav = openRightSidebar;
+  window.closeNav = closeRightSidebar;
 
   // -------------------- Battlefield Drag & Drop --------------------
   battlefield.addEventListener("dragover", (e) => e.preventDefault());
+
   battlefield.addEventListener("drop", (e) => {
     e.preventDefault();
-    const asset = JSON.parse(e.dataTransfer.getData("application/json"));
-    const img = document.createElement("img");
-    img.src = asset.image;
-    img.alt = asset.name;
-    img.classList.add("battlefield-asset");
+    try {
+      const asset = JSON.parse(e.dataTransfer.getData("application/json"));
+      const img = document.createElement("img");
+      img.src = asset.image;
+      img.alt = asset.name;
+      img.classList.add("battlefield-asset");
+
+      const rect = battlefield.getBoundingClientRect();
+      let x = e.clientX - rect.left - 12.5; // center in 25px square
+      let y = e.clientY - rect.top - 12.5;
+
+      // Snap to nearest 25px grid
+      x = Math.round(x / 25) * 25;
+      y = Math.round(y / 25) * 25;
+
+      img.style.position = "absolute";
+      img.style.left = x + "px";
+      img.style.top = y + "px";
+      img.style.width = "25px";
+      img.style.height = "25px";
+      img.style.objectFit = "cover";
+
+      battlefield.appendChild(img);
+    } catch (err) {
+      console.error("Failed to drop asset:", err);
+    }
+  });
+
+  // -------------------- Make assets draggable inside battlefield --------------------
+  battlefield.addEventListener("mousedown", (e) => {
+    const target = e.target;
+    if (!target.classList.contains("battlefield-asset")) return;
+    e.preventDefault();
+
     const rect = battlefield.getBoundingClientRect();
-    img.style.position = "absolute";
-    img.style.left = e.clientX - rect.left - 25 + "px";
-    img.style.top = e.clientY - rect.top - 25 + "px";
-    battlefield.appendChild(img);
+    const offsetX = e.clientX - target.offsetLeft - rect.left;
+    const offsetY = e.clientY - target.offsetTop - rect.top;
+
+    function onMouseMove(moveEvent) {
+      let x = moveEvent.clientX - rect.left - offsetX;
+      let y = moveEvent.clientY - rect.top - offsetY;
+
+      // Snap to nearest 25px grid
+      x = Math.round(x / 25) * 25;
+      y = Math.round(y / 25) * 25;
+
+      target.style.left = x + "px";
+      target.style.top = y + "px";
+    }
+
+    function onMouseUp() {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    }
+
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
   });
 
   // -------------------- Fullscreen --------------------
   fullscreenBtn.addEventListener("click", () => {
-    battlefield.classList.add("fullscreen");
+    if (battlefield.requestFullscreen) battlefield.requestFullscreen();
+    else if (battlefield.webkitRequestFullscreen)
+      battlefield.webkitRequestFullscreen();
+    else if (battlefield.msRequestFullscreen) battlefield.msRequestFullscreen();
     fullscreenBtn.style.display = "none";
     exitFullscreenBtn.style.display = "block";
   });
 
   exitFullscreenBtn.addEventListener("click", () => {
-    battlefield.classList.remove("fullscreen");
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    else if (document.msExitFullscreen) document.msExitFullscreen();
     fullscreenBtn.style.display = "block";
     exitFullscreenBtn.style.display = "none";
+  });
+
+  document.addEventListener("fullscreenchange", () => {
+    if (!document.fullscreenElement) {
+      fullscreenBtn.style.display = "block";
+      exitFullscreenBtn.style.display = "none";
+    }
   });
 });

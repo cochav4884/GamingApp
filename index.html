@@ -1,64 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" href="styles/index.css" />
-    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Empty favicon to prevent 404 -->
-    <link rel="icon" href="data:," />
-    <title>Gaming App</title>
-  </head>
-  <body>
-    <!-- Left Sidebar (Lobby) -->
-    <div id="LobbySidebar" class="sidebar-left Lobby">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNavLobby()"
-        >&times;</a
-      >
-      <div class="lobby-title">Lobby</div>
-      <section>
-        Player List
-        <ul>
-          <li>Creator</li>
-          <li>Host</li>
-          <li>Player 1</li>
-          <li>Player 2</li>
-        </ul>
-      </section>
-      <div>
-        Dice Box
-        <div class="dice">Roll Dice</div>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="styles/index.css" />
+  <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="icon" href="data:," />
+  <title>Gaming App</title>
+</head>
+<body>
+  <!-- Left Sidebar (Lobby) -->
+  <div id="LobbySidebar" class="sidebar-left Lobby">
+    <a href="javascript:void(0)" class="closebtn">&times;</a>
+    <div class="lobby-title">Lobby</div>
+    <section>
+      Player List
+      <ul>
+        <li>Creator</li>
+        <li>Host</li>
+        <li>Player 1</li>
+        <li>Player 2</li>
+      </ul>
+    </section>
+    <div>
+      Dice Box
+      <div class="dice">Roll Dice</div>
     </div>
-    <div id="LobbyTab" class="sidebar-tab" onclick="openNavLobby()">Lobby</div>
+  </div>
+  <div id="LobbyTab" class="sidebar-tab left-tab">Lobby</div>
 
-    <!-- Right Sidebars & Tabs Container -->
-    <div id="rightSidebarsContainer"></div>
+  <!-- Background tab on left -->
+  <div id="BackgroundTab" class="sidebar-tab left-tab">Background</div>
+  <div id="BackgroundSidebar" class="sidebar-left Background">
+    <a href="#" class="closebtn">&times;</a>
+    <div class="lobby-title">Background</div>
+    <section>
+      Choose Asset
+      <ul id="backgroundList"></ul>
+    </section>
+  </div>
 
-    <!-- Main Content / Battlefield -->
-    <div id="main">
-      <h1>Battlefield</h1>
-      <div id="battlefield">
-        <div id="gridOverlay" class="grid-overlay"></div>
-        <button id="fullscreenBtn" type="button" class="btn btn-secondary">
-          FullScreen
-        </button>
-        <button
-          id="exitFullscreenBtn"
-          type="button"
-          class="btn btn-danger hidden"
-        >
-          Exit FullScreen
-        </button>
-      </div>
-      <p>Main content area. Open any sidebar using the tabs.</p>
+  <!-- Right Sidebars & Tabs -->
+  <div id="rightSidebarsContainer" class="right-sidebars">
+    <div id="sidebarTabContainer" class="sidebar-tab-container"></div>
+  </div>
+  <div id="rightPanels"></div>
+
+  <!-- Main Content / Battlefield -->
+  <div id="main">
+    <h1>Battlefield</h1>
+    <div id="battlefield">
+      <div id="gridOverlay" class="grid-overlay"></div>
+      <button id="fullscreenBtn" type="button" class="btn btn-secondary">FullScreen</button>
+      <button id="exitFullscreenBtn" type="button" class="btn btn-danger hidden">Exit FullScreen</button>
     </div>
+    <p>Main content area. Open any sidebar using the tabs.</p>
+  </div>
 
-    <!-- Your main JS -->
-    <script type="module" src="js/main.js"></script>
-  </body>
+  <script type="module" src="js/main.js"></script>
+</body>
 </html>

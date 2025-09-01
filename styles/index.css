@@ -14,7 +14,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: 1000;
   background-color: #fff;
   overflow-x: hidden;
   padding-top: 60px;
@@ -56,7 +56,7 @@ body {
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  z-index: 3;
+  z-index: 1100;
   border-radius: 0 5px 5px 0;
   writing-mode: vertical-rl;
   text-orientation: mixed;
@@ -68,19 +68,117 @@ body {
 }
 
 /* ==================== */
-/* Generic Right Sidebars */
+/* Left Sidebar - Background */
+.Background {
+  height: 100%;
+  width: 0;               /* closed by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: #fff;
+  overflow-x: hidden;
+  padding-top: 60px;
+  transition: 0.5s;
+  color: #000;
+}
+
+.Background .lobby-title {
+  font-size: 24px;
+  font-weight: bold;
+  padding-left: 32px;
+  margin-bottom: 20px;
+}
+
+.Background section {
+  padding-left: 32px;
+  padding-top: 8px;
+}
+
+.Background .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  color: #000;
+  text-decoration: none;
+}
+
+/* When the sidebar is active/open */
+.Background.active {
+  width: 250px;  /* same width as Lobby */
+}
+
+
+/* ==================== */
+/* Right Sidebars & Tabs Container */
+.right-sidebars {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 60px;               /* width reserved for tabs */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  z-index: 900;
+}
+
+/* Background tab fixed at top */
+.right-sidebars .top-tab {
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+/* Container for all other tabs - evenly spaced */
+.sidebar-tab-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+  gap: 0px;          /* controls spacing between tabs */
+  height: auto;       /* remove flex:1 so container doesn’t stretch */
+}
+
+/* General tab styles (vertical) */
+.sidebar-tab {
+  writing-mode: vertical-rl;
+  text-align: center;
+  background: #111;
+  color: #fff;
+  padding: 10px 6px;
+  margin: 4px 0;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s, transform 0.12s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.sidebar-tab:hover {
+  background: #444;
+  transform: translateX(-4px);
+}
+
+/* ==================== */
+/* Generic Right Sidebars (panels that slide out) */
 .sidebar-right {
   height: 100%;
   width: 0; /* closed by default */
   position: fixed;
   top: 0;
   right: 0;
-  z-index: 2;
+  z-index: 1001;
   background-color: #fff;
   overflow-x: hidden;
   padding-top: 60px;
   transition: 0.5s;
   color: #000;
+  box-shadow: -4px 0 10px rgba(0,0,0,0.2);
 }
 
 .sidebar-right .lobby-title {
@@ -105,40 +203,6 @@ body {
   text-decoration: none;
 }
 
-/* Generic Right Tabs */
-.sidebar-tab-right {
-  position: fixed;
-  right: 0;
-  background-color: #111;
-  color: white;
-  padding: 15px 10px 15px 25px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 3;
-  border-radius: 5px 0 0 5px;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transition: 0.3s;
-  height: auto;
-}
-
-.sidebar-tab-right:hover {
-  background-color: #444;
-}
-
-/* Stagger right tabs automatically */
-.sidebar-tab-right:nth-of-type(1) { top: 7%; }
-.sidebar-tab-right:nth-of-type(2) { top: 17%; }
-.sidebar-tab-right:nth-of-type(3) { top: 27%; }
-.sidebar-tab-right:nth-of-type(4) { top: 37%; }
-.sidebar-tab-right:nth-of-type(5) { top: 47%; }
-.sidebar-tab-right:nth-of-type(6) { top: 57%; }
-.sidebar-tab-right:nth-of-type(7) { top: 67%; }
-.sidebar-tab-right:nth-of-type(8) { top: 77%; }
-.sidebar-tab-right:nth-of-type(9) { top: 87%; }
-.sidebar-tab-right:nth-of-type(10) { top: 97%; }
-
 /* Right Sidebar UL/Assets */
 .sidebar-right ul {
   display: grid;
@@ -151,10 +215,9 @@ body {
   max-height: calc(100% - 60px);
 }
 
-/* ==================== */
 /* Asset thumbnails */
 .asset-thumb {
-  width: 60px;         /* thumbnail size */
+  width: 60px;
   height: 60px;
   object-fit: cover;
   margin: 5px;
@@ -163,48 +226,13 @@ body {
   cursor: grab;
 }
 
-/* Background thumbnails (clickable) */
 .asset-thumb.background {
   cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
 }
 
-/* Placed Assets on Battlefield */
-#battlefield img.battlefield-asset {
-  width: 50px;
-  height: 50px;
-  cursor: move;
-}
-
-.asset-icon {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-  vertical-align: middle;
-  margin-right: 5px;
-}
-
-.placed-asset-img {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-  display: block;
-  margin: auto;
-  pointer-events: none;
-}
-
-/* ==================== */
-/* Dice Box */
-.dice,
-.diceBox {
-  border: 2px solid #000;
-  padding: 20px;
-  margin: 10px 25px;
-}
-
-/* ==================== */
-/* Main Content */
+/* Battlefield */
 #main {
   transition: margin 0.5s;
   padding: 20px;
@@ -216,102 +244,52 @@ body {
   margin-left: 250px;
 }
 
-/* Shift main content when any right sidebar is open */
+/* Shift main content when any right sidebar class present (any class name that includes "right") */
 #main[class*="right"] {
   margin-right: 250px;
   transition: margin 0.5s;
 }
 
-/* ==================== */
-/* Battlefield Container */
+/* Battlefield container */
 #battlefield {
   position: relative;
   width: 100%;
   height: 500px;
   background-color: #333;
-  background-size: cover;
-  background-position: center;
   border: 2px solid #000;
-  margin-top: 20px;
   overflow: hidden;
 }
 
-#battlefield.fullscreen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 999;
-  background-color: #fff;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.hidden {
-  display: none;
-}
-
-/* Fullscreen Buttons */
-#battlefield button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 3;
-}
-
-/* ==================== */
-/* Grid Overlay */
 .grid-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: auto;
-  background-image:
-    linear-gradient(to right, rgba(0,0,0,0.3) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,0,0,0.3) 1px, transparent 1px);
-  background-size: 25px 25px;
-  z-index: 2;
+  background-size: 25px 25px; /* grid cell size */
+  background-image: linear-gradient(to right, rgba(255,255,255,0.2) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255,255,255,0.2) 1px, transparent 1px);
+  pointer-events: none; /* so clicks go through the grid */
+  z-index: 10;
 }
 
-.grid-overlay div,
-.grid-square {
-  border: 1px solid rgba(255,255,255,0.3);
-  box-sizing: border-box;
+.hidden {
+  display: none;
 }
 
-.grid-square {
-  position: absolute;
-  width: 25px;
-  height: 25px;
-}
-
-/* ==================== */
-/* Responsive Behavior */
+/* Responsive tweaks */
 @media screen and (max-width: 992px) {
   #main {
     margin-left: 50px;
     margin-right: 50px;
   }
-
-  .Lobby,
-  .sidebar-right {
-    width: 0;
-  }
-
-  #LobbyTab,
-  .sidebar-tab-right {
-    display: block;
+  .right-sidebars {
+    width: 48px;
   }
 }
 
 @media screen and (max-width: 576px) {
-  .Lobby,
-  .sidebar-right {
-    width: 0;
-    position: fixed;
-    height: 100%;
+  .right-sidebars {
+    display: none; /* hide vertical tabs on very small screens if you want */
   }
 }
