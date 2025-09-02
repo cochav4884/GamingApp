@@ -12,7 +12,7 @@ import { treasureAssets } from "./assets/treasureAssets.js";
 
 import { populateSidebar } from "./dragdrop.js";
 import { setupDiceUI } from "./dice.js";
-import { setup3DDice } from "../js/diec3D.js";
+import { setup3DDice } from "../js/dice3D.js";
 
 // Categories for right tabs only
 const rightCategories = [
@@ -43,16 +43,16 @@ const diceValue = document.getElementById("diceValue");
 // Only create thumbnails
 setupDiceUI(diceOptions);
 
-// Setup 3D dice
-const dice3D = setup3DDice(battlefield, (value) => {
-  diceValue.innerText = value;
-});
+const dice3D = setup3DDice(battlefield, (result) => {
+    // Called when the die stops
+    diceValue.innerText = result;
+  });
 
-// Roll button
-rollBtn.addEventListener("click", () => {
-  const selectedDie = document.querySelector(".dice-thumb.selected");
-  if (!selectedDie) return alert("Select a die first!");
-  const dieName = selectedDie.dataset.die;
+  // Roll button
+  rollBtn.addEventListener("click", () => {
+    const selectedDie = document.querySelector(".dice-thumb.selected");
+    if (!selectedDie) return alert("Select a die first!");
+    const dieName = selectedDie.dataset.die;
   dice3D.rollByName(dieName);
 });
 
