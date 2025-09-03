@@ -1,6 +1,7 @@
-// js/diec3D.js
+// js/dice3D.js
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.module.js';
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js';
+
 
 // Keep the type list here to avoid cross-file imports
 const diceTypes = [
@@ -11,8 +12,39 @@ const diceTypes = [
   { name: "d12", sides: 12, color: "#ffeb3b" },
   { name: "d20", sides: 20, color: "#9c27b0" },
   { name: "d50", sides: 50, color: "#795548" },
+  { name: "d100", sides: 100, color: "#607d8b" },
 ];
 
+// ---------- Helpers for numbered textures ----------
+function makeTextTexture(text, size = 128, textColor = "#000", bgColor = "#fff") {
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, size, size);
+
+  ctx.fillStyle = textColor;
+  ctx.font = `${size * 0.6}px Arial`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, size / 2, size / 2);
+
+  return new THREE.CanvasTexture(canvas);
+}
+
+function makeNumberedMaterials(sides, textColor, bgColor) {
+  const materials = [];
+  for (let i = 1; i <= sides; i++) {
+    materials.push(new THREE.MeshStandardMaterial({
+      map: makeTextTexture(i, 256, textColor, bgColor)
+    }));
+  }
+  return materials;
+}
+
+// ---------- Main Setup ----------
 export function setup3DDice(battlefield, onResult) {
   const width = battlefield.clientWidth;
   const height = battlefield.clientHeight;
@@ -51,29 +83,68 @@ export function setup3DDice(battlefield, onResult) {
   ground.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
   world.addBody(ground);
 
-  // Helpers
+  // ---------- Geometry + Materials ----------
   function makeGeometry(type) {
     switch (type) {
-      case "d4":  return new THREE.TetrahedronGeometry(1);
-      case "d6":  return new THREE.BoxGeometry(2, 2, 2);
-      case "d8":  return new THREE.OctahedronGeometry(1.5);
-      case "d10": return new THREE.DodecahedronGeometry(1.5); // simple approx
-      case "d12": return new THREE.DodecahedronGeometry(1.8);
-      case "d20": return new THREE.IcosahedronGeometry(2);
-      case "d50": return new THREE.SphereGeometry(2, 24, 24);
-      default:    return new THREE.BoxGeometry(2, 2, 2);
+      case "d4": {
+        const geom = new THREE.TetrahedronGeometry(2);
+        geom.materials = makeNumberedMaterials(4, "#000", "#fff");
+        return geom;
+      }
+      case "d6": {
+        const geom = new THREE.BoxGeometry(2, 2, 2);
+        geom.materials = makeNumberedMaterials(6, "#000", "#fff");
+        return geom;
+      }
+      case "d8": {
+        const geom = new THREE.OctahedronGeometry(1.8);
+        geom.materials = makeNumberedMaterials(8, "#000", "#fff");
+        return geom;
+      }
+      case "d10": {
+        const geom = new THREE.CylinderGeometry(0, 2, 2, 10); // rough decahedron
+        geom.materials = makeNumberedMaterials(10, "#000", "#fff");
+        return geom;
+      }
+      case "d12": {
+        const geom = new THREE.DodecahedronGeometry(2);
+        geom.materials = makeNumberedMaterials(12, "#000", "#fff");
+        return geom;
+      }
+      case "d20": {
+        const geom = new THREE.IcosahedronGeometry(2.2);
+        geom.materials = makeNumberedMaterials(20, "#000", "#fff");
+        return geom;
+      }
+      case "d50":
+        return new THREE.SphereGeometry(2, 24, 24);
+      case "d100":
+        return new THREE.SphereGeometry(2, 32, 32);
+      default: {
+        const geom = new THREE.BoxGeometry(2, 2, 2);
+        geom.materials = makeNumberedMaterials(6, "#000", "#fff");
+        return geom;
+      }
     }
   }
 
+  // ---------- Rolling ----------
   function rollDie(dieType, startX = -8, startZ = (Math.random() - 0.5) * 10) {
     const geom = makeGeometry(dieType.name);
-    const mat = new THREE.MeshStandardMaterial({ color: dieType.color, flatShading: true });
-    const mesh = new THREE.Mesh(geom, mat);
+
+    let mesh;
+    if (geom.materials) {
+      mesh = new THREE.Mesh(geom, geom.materials);
+    } else {
+      const mat = new THREE.MeshStandardMaterial({ color: dieType.color, flatShading: true });
+      mesh = new THREE.Mesh(geom, mat);
+    }
+
     mesh.castShadow = true;
     mesh.position.set(startX, 6, startZ);
     scene.add(mesh);
 
-    // Physics shape: box for d6, sphere approx for others (simple + fast)
+    // Physics shape: box for d6, sphere for others (simple)
     const shape = (dieType.name === "d6")
       ? new CANNON.Box(new CANNON.Vec3(1, 1, 1))
       : new CANNON.Sphere(1.2);
@@ -99,7 +170,7 @@ export function setup3DDice(battlefield, onResult) {
     active.push(rollDie(type));
   }
 
-  // Tick
+  // ---------- Animation Loop ----------
   function animate() {
     requestAnimationFrame(animate);
     world.step(1 / 60);
@@ -111,9 +182,9 @@ export function setup3DDice(battlefield, onResult) {
 
       // Has it settled?
       if (d.body.velocity.length() < 0.12 && d.body.angularVelocity.length() < 0.12) {
-        // For now, we generate the face value randomly
-        const value = (d.dieType.name === "d50")
-          ? Math.floor(Math.random() * 50) + 1
+        // Roll outcome
+        const value = (d.dieType.name === "d50" || d.dieType.name === "d100")
+          ? Math.floor(Math.random() * d.dieType.sides) + 1
           : Math.floor(Math.random() * d.dieType.sides) + 1;
 
         if (typeof onResult === "function") onResult(value);
