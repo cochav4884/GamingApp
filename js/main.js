@@ -12,7 +12,16 @@ import { treasureAssets } from "./assets/treasureAssets.js";
 
 import { populateSidebar } from "./dragdrop.js";
 import { setupDiceUI } from "./dice.js";
-import { setup3DDice } from "../js/dice3D.js";
+import { initDice3D, rollByName } from "./dice3D.js";
+
+
+// ✅ initialize dice scene only once
+initDice3D("battlefield");
+
+// ✅ Simple dice roller (with numbers, no .glb needed)
+function rollDice(sides) {
+  return Math.floor(Math.random() * sides) + 1;
+}
 
 // Categories for right tabs only
 const rightCategories = [
@@ -36,26 +45,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const fullscreenBtn = document.getElementById("fullscreenBtn");
   const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
 
-const diceOptions = document.getElementById("diceOptions");
-const rollBtn = document.getElementById("rollBtn");
-const diceValue = document.getElementById("diceValue");
+  // Dice UI
+  const diceOptions = document.getElementById("diceOptions");
+  const rollBtn = document.getElementById("rollBtn");
+  const diceValue = document.getElementById("diceValue");
 
-// Only create thumbnails
-setupDiceUI(diceOptions);
+  // ✅ Setup dice thumbnails
+  setupDiceUI(diceOptions);
 
-const dice3D = setup3DDice(battlefield, (result) => {
-    // Called when the die stops
-    diceValue.innerText = result;
-  });
-
-  // Roll button
+  // ✅ Roll button event
   rollBtn.addEventListener("click", () => {
     const selectedDie = document.querySelector(".dice-thumb.selected");
     if (!selectedDie) return alert("Select a die first!");
     const dieName = selectedDie.dataset.die;
-  dice3D.rollByName(dieName);
-});
+    const sides = parseInt(dieName.replace("d", ""), 10);
 
+    // Roll with 3D dice
+    rollByName(dieName);
+
+    // Also show result (random number)
+    const result = rollDice(sides);
+    diceValue.innerText = result;
+  });
 
   // -------------------- Right Sidebars + Tabs --------------------
   rightCategories.forEach((cat, index) => {
@@ -91,7 +102,12 @@ const dice3D = setup3DDice(battlefield, (result) => {
       .querySelector(".closebtn")
       .addEventListener("click", () => closeRightSidebar(cat.name, rightClass));
 
-    populateSidebar(cat.assets, `${cat.name.toLowerCase()}List`, false, battlefield);
+    populateSidebar(
+      cat.assets,
+      `${cat.name.toLowerCase()}List`,
+      false,
+      battlefield
+    );
   });
 
   // -------------------- Left Lobby --------------------
@@ -111,9 +127,14 @@ const dice3D = setup3DDice(battlefield, (result) => {
   }
 
   if (lobbyTab)
-    lobbyTab.addEventListener("click", () => openLeftSidebar(lobbySidebar, lobbyTab));
+    lobbyTab.addEventListener("click", () =>
+      openLeftSidebar(lobbySidebar, lobbyTab)
+    );
   const lbClose = lobbySidebar.querySelector(".closebtn");
-  if (lbClose) lbClose.addEventListener("click", () => closeLeftSidebar(lobbySidebar, lobbyTab));
+  if (lbClose)
+    lbClose.addEventListener("click", () =>
+      closeLeftSidebar(lobbySidebar, lobbyTab)
+    );
 
   // -------------------- Left Background --------------------
   const bgTab = document.getElementById("BackgroundTab");
@@ -152,16 +173,21 @@ const dice3D = setup3DDice(battlefield, (result) => {
     tab.style.display = "block";
   }
 
-  bgTab.addEventListener("click", () => openBackgroundSidebar(bgSidebar, bgTab));
-  bgSidebar.querySelector(".closebtn").addEventListener("click", () =>
-    closeBackgroundSidebar(bgSidebar, bgTab)
+  bgTab.addEventListener("click", () =>
+    openBackgroundSidebar(bgSidebar, bgTab)
   );
+  bgSidebar
+    .querySelector(".closebtn")
+    .addEventListener("click", () => closeBackgroundSidebar(bgSidebar, bgTab));
 
   // -------------------- Right Sidebars Open/Close --------------------
   function openRightSidebar(id, className) {
     rightCategories.forEach((cat) => {
       if (cat.name !== id)
-        closeRightSidebar(cat.name, "right" + (rightCategories.indexOf(cat) + 1));
+        closeRightSidebar(
+          cat.name,
+          "right" + (rightCategories.indexOf(cat) + 1)
+        );
     });
     const sidebarEl = document.getElementById(id + "Sidebar");
     if (sidebarEl) sidebarEl.style.width = "250px";
@@ -243,7 +269,8 @@ const dice3D = setup3DDice(battlefield, (result) => {
   // -------------------- Fullscreen --------------------
   fullscreenBtn.addEventListener("click", () => {
     if (battlefield.requestFullscreen) battlefield.requestFullscreen();
-    else if (battlefield.webkitRequestFullscreen) battlefield.webkitRequestFullscreen();
+    else if (battlefield.webkitRequestFullscreen)
+      battlefield.webkitRequestFullscreen();
     else if (battlefield.msRequestFullscreen) battlefield.msRequestFullscreen();
     fullscreenBtn.style.display = "none";
     exitFullscreenBtn.style.display = "block";

@@ -6,7 +6,6 @@ export const diceTypes = [
   { name: "d10", sides: 10, color: "#ff9800" },
   { name: "d12", sides: 12, color: "#ffeb3b" },
   { name: "d20", sides: 20, color: "#9c27b0" },
-  { name: "d50", sides: 50, color: "#795548" },
   { name: "d100", sides: 100, color: "#607d8b" },
 ];
 
