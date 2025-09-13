@@ -14,10 +14,15 @@ body {
   position: fixed;
   top: 0;
   left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
   z-index: 1000;
   background-color: #fff;
   overflow-x: hidden;
+  overflow-y: auto;   /* <-- allows vertical scroll */
   padding-top: 60px;
+  box-sizing: border-box;
   transition: 0.5s;
   color: #000;
 }
@@ -75,9 +80,14 @@ body {
   position: fixed;
   top: 0;
   left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
   z-index: 1000;
   background-color: #fff;
+  box-sizing: border-box;
   overflow-x: hidden;
+  overflow-y: auto;
   padding-top: 60px;
   transition: 0.5s;
   color: #000;
@@ -117,13 +127,18 @@ body {
   top: 0;
   right: 0;
   bottom: 0;
-  width: 60px;               /* width reserved for tabs */
+  width: 60px;
+  height: auto;         /* reserved for tabs */
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-y: auto;
+  overflow-x: hid;
   padding-top: 8px;
   padding-bottom: 8px;
   z-index: 900;
+  background-color: transparent; /* optional */
+  overflow: hidden;    /* prevent tabs container from scrolling */
 }
 
 /* Background tab fixed at top */
