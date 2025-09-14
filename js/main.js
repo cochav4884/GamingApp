@@ -50,49 +50,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setupDiceUI(diceOptions); // dice thumbnails
 
-  // ==================== Animate 3D dice across battlefield (3-sec roll) ====================
- rollBtn.addEventListener("click", () => {
+ // ==================== Animate Dice Roll ====================
+rollBtn.addEventListener("click", () => {
   const selectedDie = document.querySelector(".dice-thumb.selected");
   if (!selectedDie) return alert("Select a die first!");
   const dieName = selectedDie.dataset.die;
 
-  // Create dice mesh directly (no physics body)
-  const diceObj = rollByName(dieName, null, { physics: false });
-  if (!diceObj) return;
-
-  const mesh = diceObj.mesh;
-
-  // Place dice on far right
-  mesh.position.set(7, 1, 0);
-
-  // Animate across field in 3 seconds
-  let start = null;
-  const duration = 3000; // ms
-  const startX = 7;
-  const endX = -7;
-
-  function animate(timestamp) {
-    if (!start) start = timestamp;
-    const progress = (timestamp - start) / duration;
-
-    if (progress < 1) {
-      mesh.position.x = startX + (endX - startX) * progress;
-      requestAnimationFrame(animate);
-    } else {
-      // End of roll: choose result
-      const result = diceObj.dieType.sides
-        ? Math.floor(Math.random() * diceObj.dieType.sides) + 1
-        : "?";
-
-      diceValue.innerText = result;
-
-      // Remove dice mesh from scene
-      removeDice(diceObj);
-    }
-  }
-
-  requestAnimationFrame(animate);
+  // Use rollByName to handle animation + result
+  rollByName(dieName, (value) => {
+    diceValue.innerText = value;
+  });
 });
+
 
   // ==================== Right Sidebars + Tabs ====================
   rightCategories.forEach((cat, index) => {
