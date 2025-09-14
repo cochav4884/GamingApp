@@ -116,10 +116,14 @@ export function initDice3D(container) {
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-  directionalLight.position.set(10, 20, 10);
-  scene.add(directionalLight);
+  // Stronger ambient light
+scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+
+// Brighter directional light
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+directionalLight.position.set(10, 25, 15);
+scene.add(directionalLight);
+
 
   animate();
 }
