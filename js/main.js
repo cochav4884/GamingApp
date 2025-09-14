@@ -1,3 +1,4 @@
+// main.js (full)
 import { backgroundAssets } from "../js/background.js";
 import { arrowBowAssets } from "./assets/arrowBowAssets.js";
 import { axeclubAssets } from "./assets/axeclubAssets.js";
@@ -12,18 +13,17 @@ import { treasureAssets } from "./assets/treasureAssets.js";
 
 import { populateSidebar } from "./dragdrop.js";
 import { setupDiceUI } from "./dice.js";
-import { initDice3D, rollByName } from "./dice3D.js";
+import { initDice3D, rollByName, removeDice, activeDice } from "./dice3D.js";
 
+// -------------------- Initialize --------------------
+const battlefield = document.getElementById("battlefield");
+initDice3D(battlefield); // Pass actual container element
 
-// ✅ initialize dice scene only once
-initDice3D("battlefield");
-
-// ✅ Simple dice roller (with numbers, no .glb needed)
 function rollDice(sides) {
   return Math.floor(Math.random() * sides) + 1;
 }
 
-// Categories for right tabs only
+// Right sidebar categories
 const rightCategories = [
   { name: "ArrowBow", assets: arrowBowAssets },
   { name: "Axeclub", assets: axeclubAssets },
@@ -38,43 +38,68 @@ const rightCategories = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
-  // -------------------- DOM Elements --------------------
-  const tabContainer = document.getElementById("sidebarTabContainer"); // right tabs container
+  const tabContainer = document.getElementById("sidebarTabContainer");
   const panelsContainer = document.getElementById("rightPanels");
-  const battlefield = document.getElementById("battlefield");
   const fullscreenBtn = document.getElementById("fullscreenBtn");
   const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
 
-  // Dice UI
+  // Dice UI elements
   const diceOptions = document.getElementById("diceOptions");
   const rollBtn = document.getElementById("rollBtn");
   const diceValue = document.getElementById("diceValue");
 
-  // ✅ Setup dice thumbnails
-  setupDiceUI(diceOptions);
+  setupDiceUI(diceOptions); // dice thumbnails
 
-  // ✅ Roll button event
-  rollBtn.addEventListener("click", () => {
-    const selectedDie = document.querySelector(".dice-thumb.selected");
-    if (!selectedDie) return alert("Select a die first!");
-    const dieName = selectedDie.dataset.die;
-    const sides = parseInt(dieName.replace("d", ""), 10);
+  // ==================== Animate 3D dice across battlefield (3-sec roll) ====================
+ rollBtn.addEventListener("click", () => {
+  const selectedDie = document.querySelector(".dice-thumb.selected");
+  if (!selectedDie) return alert("Select a die first!");
+  const dieName = selectedDie.dataset.die;
 
-    // Roll with 3D dice
-    rollByName(dieName);
+  // Create dice mesh directly (no physics body)
+  const diceObj = rollByName(dieName, null, { physics: false });
+  if (!diceObj) return;
 
-    // Also show result (random number)
-    const result = rollDice(sides);
-    diceValue.innerText = result;
-  });
+  const mesh = diceObj.mesh;
 
-  // -------------------- Right Sidebars + Tabs --------------------
+  // Place dice on far right
+  mesh.position.set(7, 1, 0);
+
+  // Animate across field in 3 seconds
+  let start = null;
+  const duration = 3000; // ms
+  const startX = 7;
+  const endX = -7;
+
+  function animate(timestamp) {
+    if (!start) start = timestamp;
+    const progress = (timestamp - start) / duration;
+
+    if (progress < 1) {
+      mesh.position.x = startX + (endX - startX) * progress;
+      requestAnimationFrame(animate);
+    } else {
+      // End of roll: choose result
+      const result = diceObj.dieType.sides
+        ? Math.floor(Math.random() * diceObj.dieType.sides) + 1
+        : "?";
+
+      diceValue.innerText = result;
+
+      // Remove dice mesh from scene
+      removeDice(diceObj);
+    }
+  }
+
+  requestAnimationFrame(animate);
+});
+
+  // ==================== Right Sidebars + Tabs ====================
   rightCategories.forEach((cat, index) => {
     const sidebarId = cat.name + "Sidebar";
     const tabId = cat.name + "Tab";
     const rightClass = "right" + (index + 1);
 
-    // Create tab
     const tab = document.createElement("div");
     tab.id = tabId;
     tab.className = "sidebar-tab";
@@ -82,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
     tab.addEventListener("click", () => openRightSidebar(cat.name, rightClass));
     tabContainer.appendChild(tab);
 
-    // Create sidebar panel
     const sidebar = document.createElement("div");
     sidebar.id = sidebarId;
     sidebar.className = `sidebar-right ${cat.name}`;
@@ -110,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
 
-  // -------------------- Left Lobby --------------------
+  // ==================== Left Sidebar (Lobby & Background) ====================
   const lobbyTab = document.getElementById("LobbyTab");
   const lobbySidebar = document.getElementById("LobbySidebar");
 
@@ -136,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
       closeLeftSidebar(lobbySidebar, lobbyTab)
     );
 
-  // -------------------- Left Background --------------------
   const bgTab = document.getElementById("BackgroundTab");
   const bgSidebar = document.getElementById("BackgroundSidebar");
   const bgList = document.getElementById("backgroundList");
@@ -180,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelector(".closebtn")
     .addEventListener("click", () => closeBackgroundSidebar(bgSidebar, bgTab));
 
-  // -------------------- Right Sidebars Open/Close --------------------
+  // ==================== Right Sidebar Open/Close ====================
   function openRightSidebar(id, className) {
     rightCategories.forEach((cat) => {
       if (cat.name !== id)
@@ -207,9 +230,8 @@ document.addEventListener("DOMContentLoaded", () => {
   window.openNav = openRightSidebar;
   window.closeNav = closeRightSidebar;
 
-  // -------------------- Battlefield Drag & Drop --------------------
+  // ==================== Battlefield Drag & Drop ====================
   battlefield.addEventListener("dragover", (e) => e.preventDefault());
-
   battlefield.addEventListener("drop", (e) => {
     e.preventDefault();
     try {
@@ -266,28 +288,32 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("mouseup", onMouseUp);
   });
 
-  // -------------------- Fullscreen --------------------
+  // ==================== Fullscreen ====================
+  function updateFullscreenButtons() {
+    if (document.fullscreenElement) {
+      fullscreenBtn.style.display = "none";
+      exitFullscreenBtn.style.display = "block";
+    } else {
+      fullscreenBtn.style.display = "block";
+      exitFullscreenBtn.style.display = "none";
+    }
+  }
+
+  // Set initial state
+  updateFullscreenButtons();
+
   fullscreenBtn.addEventListener("click", () => {
     if (battlefield.requestFullscreen) battlefield.requestFullscreen();
     else if (battlefield.webkitRequestFullscreen)
       battlefield.webkitRequestFullscreen();
     else if (battlefield.msRequestFullscreen) battlefield.msRequestFullscreen();
-    fullscreenBtn.style.display = "none";
-    exitFullscreenBtn.style.display = "block";
   });
 
   exitFullscreenBtn.addEventListener("click", () => {
     if (document.exitFullscreen) document.exitFullscreen();
     else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
     else if (document.msExitFullscreen) document.msExitFullscreen();
-    fullscreenBtn.style.display = "block";
-    exitFullscreenBtn.style.display = "none";
   });
 
-  document.addEventListener("fullscreenchange", () => {
-    if (!document.fullscreenElement) {
-      fullscreenBtn.style.display = "block";
-      exitFullscreenBtn.style.display = "none";
-    }
-  });
+  document.addEventListener("fullscreenchange", updateFullscreenButtons);
 });
