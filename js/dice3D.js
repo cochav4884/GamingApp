@@ -1,6 +1,4 @@
-// js/dice3D.js
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js";
-import * as CANNON from "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js";
 
 // ---------- Dice definitions ----------
 const diceTypes = [
@@ -14,11 +12,9 @@ const diceTypes = [
 ];
 
 let scene, camera, renderer;
-let world;
 let battlefield;
-let lastTime = 0;
 
-export const activeDice = []; // only export once
+export const activeDice = []; // kept for compatibility
 
 // ---------- Dice geometries ----------
 function createDieGeometry(sides) {
@@ -79,47 +75,6 @@ export function initDice3D(container) {
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
 
-  // ---------- Physics World ----------
-  world = new CANNON.World();
-  world.gravity.set(0, -9.82, 0);
-  world.broadphase = new CANNON.NaiveBroadphase();
-  world.solver.iterations = 20;
-
-  // Ground
-  const groundShape = new CANNON.Plane();
-  const groundBody = new CANNON.Body({ mass: 0 });
-  groundBody.addShape(groundShape);
-  groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
-  world.addBody(groundBody);
-
-  // Side walls
-  const wallMat = new CANNON.Material();
-  const wallDistance = 8;
-  const wallDepth = 20;
-
-  const leftWall = new CANNON.Body({ mass: 0, material: wallMat });
-  leftWall.addShape(new CANNON.Plane());
-  leftWall.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI / 2);
-  leftWall.position.set(-wallDistance, 0, 0);
-  world.addBody(leftWall);
-
-  const rightWall = new CANNON.Body({ mass: 0, material: wallMat });
-  rightWall.addShape(new CANNON.Plane());
-  rightWall.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI / 2);
-  rightWall.position.set(wallDistance, 0, 0);
-  world.addBody(rightWall);
-
-  const backWall = new CANNON.Body({ mass: 0, material: wallMat });
-  backWall.addShape(new CANNON.Plane());
-  backWall.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI);
-  backWall.position.set(0, 0, -wallDepth / 2);
-  world.addBody(backWall);
-
-  const frontWall = new CANNON.Body({ mass: 0, material: wallMat });
-  frontWall.addShape(new CANNON.Plane());
-  frontWall.position.set(0, 0, wallDepth / 2);
-  world.addBody(frontWall);
-
   // Lights
   scene.add(new THREE.AmbientLight(0xffffff, 0.6));
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
@@ -130,117 +85,54 @@ export function initDice3D(container) {
   animate();
 }
 
-// ---------- Dice sizes ----------
-const diceSizes = {
-  d4: 1.2, d6: 1, d8: 1.1, d10: 1.1,
-  d12: 1.2, d20: 1.3, d100: 1
-};
-
-// ---------- Remove dice ----------
-export function removeDice(d) {
-  if (!d || d.removed) return;
-  try { scene.remove(d.mesh); } catch {}
-  try { world.removeBody(d.body); } catch {}
-  d.removed = true;
-  const idx = activeDice.indexOf(d);
-  if (idx > -1) activeDice.splice(idx, 1);
-}
-
-// ---------- Roll a die ----------
+// ---------- Roll a die (smooth animation only) ----------
 export function rollByName(dieName, onResult = null, opts = {}) {
-  if (!scene || !world) return null;
+  if (!scene) return null;
   const type = diceTypes.find(d => d.name === dieName);
   if (!type) return null;
 
   const mesh = createDieMesh(type.sides, type.color);
-  const start = opts.position || { x: 6, y: 2, z: 0 }; // start on right
-  mesh.position.set(start.x, start.y, start.z);
   scene.add(mesh);
 
-  // Physics
-  const size = diceSizes[dieName] || 1;
-  const shape = dieName === "d100" ? new CANNON.Sphere(size / 2) : new CANNON.Box(new CANNON.Vec3(size/2,size/2,size/2));
-  const body = new CANNON.Body({ mass: 1, shape });
-  body.position.set(start.x, start.y, start.z);
+  // Start on right side
+  const start = opts.position || { x: 7, y: 1, z: 0 };
+  mesh.position.set(start.x, start.y, start.z);
 
-  // Gentle leftward impulse for smooth tumble
-  body.velocity.set(-3, 2, (Math.random()-0.5)*1.5);
-  body.angularVelocity.set((Math.random()-0.5)*4,(Math.random()-0.5)*4,(Math.random()-0.5)*4);
+  const duration = 3000; // ms
+  const startX = start.x;
+  const endX = -7;
+  let startTime = null;
 
-  body.linearDamping = 0.2;
-  body.angularDamping = 0.1;
-  world.addBody(body);
+  function animateDice(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const progress = (timestamp - startTime) / duration;
 
-  const diceObj = { mesh, body, dieType: type, onResult, settled: false, removed: false };
-  activeDice.push(diceObj);
+    if (progress < 1) {
+      mesh.position.x = startX + (endX - startX) * progress;
+      mesh.rotation.x += 0.1;
+      mesh.rotation.y += 0.12;
+      requestAnimationFrame(animateDice);
+    } else {
+      const value = Math.floor(Math.random() * type.sides) + 1;
+      if (typeof onResult === "function") onResult(value);
+      scene.remove(mesh);
+    }
+  }
 
-  return diceObj;
+  requestAnimationFrame(animateDice);
+  return { mesh, dieType: type, noPhysics: true };
 }
 
-// ---------- Top-face calculation ----------
-function getUpVector(mesh) {
-  const up = new THREE.Vector3(0,1,0);
-  up.applyQuaternion(mesh.quaternion);
-  return up;
-}
-
-const dieFaceNormals = {
-  d4: [
-    new THREE.Vector3(0, 1, 0),
-    new THREE.Vector3(0, -1, 1).normalize(),
-    new THREE.Vector3(1, -1, 0).normalize(),
-    new THREE.Vector3(-1, -1, -1).normalize(),
-  ],
-  d6: [
-    new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, -1, 0),
-    new THREE.Vector3(1, 0, 0), new THREE.Vector3(-1, 0, 0),
-    new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0, -1)
-  ],
-  d8: [...Array(8)].map(_=>new THREE.Vector3(Math.random(),Math.random(),Math.random()).normalize()),
-  d10: [...Array(10)].map(_=>new THREE.Vector3(Math.random(),Math.random(),Math.random()).normalize()),
-  d12: [...Array(12)].map(_=>new THREE.Vector3(Math.random(),Math.random(),Math.random()).normalize()),
-  d20: [...Array(20)].map(_=>new THREE.Vector3(Math.random(),Math.random(),Math.random()).normalize()),
-  d100: []
-};
-
-function getTopFace(dieType, mesh) {
-  if(dieType==="d100") return Math.floor(Math.random()*100)+1;
-  const up = getUpVector(mesh);
-  const normals = dieFaceNormals[dieType];
-  let maxDot = -Infinity, topIndex = 0;
-  normals.forEach((n,i)=>{
-    const dot = n.dot(up);
-    if(dot>maxDot){ maxDot=dot; topIndex=i; }
-  });
-  return topIndex+1;
+// ---------- Remove dice (kept for compatibility) ----------
+export function removeDice(d) {
+  if (!d || !d.mesh) return;
+  scene.remove(d.mesh);
 }
 
 // ---------- Animation loop ----------
 function animate() {
   requestAnimationFrame(animate);
-  if(world) world.step(1/60);
-
-  for(let i=activeDice.length-1;i>=0;i--){
-    const d = activeDice[i];
-    if(d.removed) continue;
-
-    d.mesh.position.copy(d.body.position);
-    d.mesh.quaternion.copy(d.body.quaternion);
-
-    // Settled detection
-    if(!d.settled && d.body.velocity.length()<0.05 && d.body.angularVelocity.length()<0.05){
-      d.settled = true;
-      if(typeof d.onResult==="function"){
-        const value = getTopFace(d.dieType.name, d.mesh);
-        d.onResult(value);
-      }
-    }
-
-    // Safety: remove runaway dice
-    if(Math.abs(d.body.position.x)>100 || Math.abs(d.body.position.y)>200){
-      removeDice(d);
-    }
+  if (renderer && scene && camera) {
+    renderer.render(scene, camera);
   }
-
-  renderer.render(scene, camera);
 }
