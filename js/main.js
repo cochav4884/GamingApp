@@ -50,18 +50,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setupDiceUI(diceOptions); // dice thumbnails
 
- // ==================== Animate Dice Roll ====================
-rollBtn.addEventListener("click", () => {
-  const selectedDie = document.querySelector(".dice-thumb.selected");
-  if (!selectedDie) return alert("Select a die first!");
-  const dieName = selectedDie.dataset.die;
+  // ==================== Animate Dice Roll ====================
+  rollBtn.addEventListener("click", () => {
+    const selectedDie = document.querySelector(".dice-thumb.selected");
+    if (!selectedDie) return alert("Select a die first!");
+    const dieName = selectedDie.dataset.die;
 
-  // Use rollByName to handle animation + result
-  rollByName(dieName, (value) => {
-    diceValue.innerText = value;
+    // Use rollByName to handle animation + result
+    rollByName(dieName, (value) => {
+      diceValue.innerText = value;
+    });
   });
-});
-
 
   // ==================== Right Sidebars + Tabs ====================
   rightCategories.forEach((cat, index) => {
@@ -103,31 +102,36 @@ rollBtn.addEventListener("click", () => {
     );
   });
 
-  // ==================== Left Sidebar (Lobby & Background) ====================
-  const lobbyTab = document.getElementById("LobbyTab");
-  const lobbySidebar = document.getElementById("LobbySidebar");
+// ---------------- Left Sidebar Logic (Lobby & Background) ----------------
+const leftSidebars = [
+  { tabId: "LobbyTab", sidebarId: "LobbySidebar", populate: null },
+  { tabId: "BackgroundTab", sidebarId: "BackgroundSidebar", populate: populateBackgrounds },
+];
 
-  function openLeftSidebar(sidebar, tab) {
-    sidebar.style.width = "250px";
-    document.getElementById("main").classList.add("left-open");
-    tab.style.display = "none";
-  }
+// Generic open/close
+function openLeftSidebar(sidebar, tab, populateFunc) {
+  sidebar.classList.add("active");
+  document.getElementById("main").classList.add("left-open");
+  tab.style.display = "none";
+  if (populateFunc) populateFunc();
+}
 
-  function closeLeftSidebar(sidebar, tab) {
-    sidebar.style.width = "0";
-    document.getElementById("main").classList.remove("left-open");
-    tab.style.display = "block";
-  }
+function closeLeftSidebar(sidebar, tab) {
+  sidebar.classList.remove("active");
+  document.getElementById("main").classList.remove("left-open");
+  tab.style.display = "block";
+}
 
-  if (lobbyTab)
-    lobbyTab.addEventListener("click", () =>
-      openLeftSidebar(lobbySidebar, lobbyTab)
-    );
-  const lbClose = lobbySidebar.querySelector(".closebtn");
-  if (lbClose)
-    lbClose.addEventListener("click", () =>
-      closeLeftSidebar(lobbySidebar, lobbyTab)
-    );
+// Attach events
+leftSidebars.forEach(({ tabId, sidebarId, populate }) => {
+  const tab = document.getElementById(tabId);
+  const sidebar = document.getElementById(sidebarId);
+
+  tab.addEventListener("click", () => openLeftSidebar(sidebar, tab, populate));
+  const closeBtn = sidebar.querySelector(".closebtn");
+  if (closeBtn) closeBtn.addEventListener("click", () => closeLeftSidebar(sidebar, tab));
+});
+
 
   const bgTab = document.getElementById("BackgroundTab");
   const bgSidebar = document.getElementById("BackgroundSidebar");
