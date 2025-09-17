@@ -58,15 +58,11 @@
     <div id="LobbySidebar" class="sidebar-left Lobby">
       <a href="javascript:void(0)" class="closebtn">&times;</a>
       <div class="lobby-title">Lobby</div>
-      <section>
-        Player List
-        <ul>
-          <li>Creator</li>
-          <li>Host</li>
-          <li>Player 1</li>
-          <li>Player 2</li>
-        </ul>
-      </section>
+      <div id="loggedInList" class="logged-in-list">
+        <h3>Users in Lobby:</h3>
+        <ul id="userList"></ul>
+      </div>
+
       <div id="diceBox" class="lobby-section">
         <h4>Dice Box</h4>
         <div id="diceOptions" class="dice-options">
@@ -79,7 +75,7 @@
         <button type="button" id="logoutBtn">Logout</button>
       </div>
     </div>
-        <div id="LobbyTab" class="sidebar-tab left-tab">Lobby</div>
+    <div id="LobbyTab" class="sidebar-tab left-tab">Lobby</div>
 
     <!-- Background tab on left -->
     <div id="BackgroundTab" class="sidebar-tab left-tab">Background</div>

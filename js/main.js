@@ -28,6 +28,20 @@ if (!username || !role) {
   window.location.href = "login.html";
 }
 
+function updateLoggedInList() {
+  const userList = document.getElementById("userList");
+  userList.innerHTML = "";
+  const loggedInUsers = JSON.parse(localStorage.getItem("loggedInUsers")) || [];
+  loggedInUsers.forEach((u) => {
+    const li = document.createElement("li");
+    li.textContent = `${u.username} (${u.role})`;
+    userList.appendChild(li);
+  });
+}
+
+// Update when page loads
+updateLoggedInList();
+
 function rollDice(sides) {
   return Math.floor(Math.random() * sides) + 1;
 }

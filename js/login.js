@@ -18,24 +18,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const role = document.getElementById("role").value;
 
     // Check if user exists
-    const user = users.find(u => 
-      u.username === username && 
-      u.password === password && 
-      u.role === role
+    const user = users.find(
+      (u) =>
+        u.username === username && u.password === password && u.role === role
     );
 
     if (user) {
-      // Hide error
       loginError.style.display = "none";
 
-      // Optionally store logged-in info in localStorage
+      // Save current user
       localStorage.setItem("username", username);
       localStorage.setItem("role", role);
 
-      // Redirect to main lobby page
+      // Add user to global logged-in list
+      let loggedInUsers =
+        JSON.parse(localStorage.getItem("loggedInUsers")) || [];
+
+      // Prevent duplicates
+      if (!loggedInUsers.some((u) => u.username === username)) {
+        loggedInUsers.push({ username, role });
+        localStorage.setItem("loggedInUsers", JSON.stringify(loggedInUsers));
+      }
+
+      // Redirect to lobby
       window.location.href = "index.html";
     } else {
-      // Show error
       loginError.style.display = "block";
     }
   });
