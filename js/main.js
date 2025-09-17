@@ -19,6 +19,15 @@ import { initDice3D, rollByName, removeDice, activeDice } from "./dice3D.js";
 const battlefield = document.getElementById("battlefield");
 initDice3D(battlefield); // Pass actual container element
 
+// main.js - at the very top
+const username = localStorage.getItem("username");
+const role = localStorage.getItem("role");
+
+if (!username || !role) {
+  // Not logged in, redirect to login
+  window.location.href = "login.html";
+}
+
 function rollDice(sides) {
   return Math.floor(Math.random() * sides) + 1;
 }
@@ -36,6 +45,12 @@ const rightCategories = [
   { name: "Sword", assets: swordAssets },
   { name: "Treasure", assets: treasureAssets },
 ];
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("username");
+  localStorage.removeItem("role");
+  window.location.href = "login.html";
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   const tabContainer = document.getElementById("sidebarTabContainer");
@@ -102,36 +117,42 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
 
-// ---------------- Left Sidebar Logic (Lobby & Background) ----------------
-const leftSidebars = [
-  { tabId: "LobbyTab", sidebarId: "LobbySidebar", populate: null },
-  { tabId: "BackgroundTab", sidebarId: "BackgroundSidebar", populate: populateBackgrounds },
-];
+  // ---------------- Left Sidebar Logic (Lobby & Background) ----------------
+  const leftSidebars = [
+    { tabId: "LobbyTab", sidebarId: "LobbySidebar", populate: null },
+    {
+      tabId: "BackgroundTab",
+      sidebarId: "BackgroundSidebar",
+      populate: populateBackgrounds,
+    },
+  ];
 
-// Generic open/close
-function openLeftSidebar(sidebar, tab, populateFunc) {
-  sidebar.classList.add("active");
-  document.getElementById("main").classList.add("left-open");
-  tab.style.display = "none";
-  if (populateFunc) populateFunc();
-}
+  // Generic open/close
+  function openLeftSidebar(sidebar, tab, populateFunc) {
+    sidebar.classList.add("active");
+    document.getElementById("main").classList.add("left-open");
+    tab.style.display = "none";
+    if (populateFunc) populateFunc();
+  }
 
-function closeLeftSidebar(sidebar, tab) {
-  sidebar.classList.remove("active");
-  document.getElementById("main").classList.remove("left-open");
-  tab.style.display = "block";
-}
+  function closeLeftSidebar(sidebar, tab) {
+    sidebar.classList.remove("active");
+    document.getElementById("main").classList.remove("left-open");
+    tab.style.display = "block";
+  }
 
-// Attach events
-leftSidebars.forEach(({ tabId, sidebarId, populate }) => {
-  const tab = document.getElementById(tabId);
-  const sidebar = document.getElementById(sidebarId);
+  // Attach events
+  leftSidebars.forEach(({ tabId, sidebarId, populate }) => {
+    const tab = document.getElementById(tabId);
+    const sidebar = document.getElementById(sidebarId);
 
-  tab.addEventListener("click", () => openLeftSidebar(sidebar, tab, populate));
-  const closeBtn = sidebar.querySelector(".closebtn");
-  if (closeBtn) closeBtn.addEventListener("click", () => closeLeftSidebar(sidebar, tab));
-});
-
+    tab.addEventListener("click", () =>
+      openLeftSidebar(sidebar, tab, populate)
+    );
+    const closeBtn = sidebar.querySelector(".closebtn");
+    if (closeBtn)
+      closeBtn.addEventListener("click", () => closeLeftSidebar(sidebar, tab));
+  });
 
   const bgTab = document.getElementById("BackgroundTab");
   const bgSidebar = document.getElementById("BackgroundSidebar");
