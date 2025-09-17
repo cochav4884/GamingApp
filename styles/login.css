@@ -1,0 +1,81 @@
+/* ==================== */
+/* Body */
+body {
+  background-color: #347893; /* matches main app */
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Login Card */
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: #fff; /* white card like sidebars */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+  text-align: center;
+}
+
+/* Card Header */
+.login-card h2 {
+  font-weight: bold;
+  font-size: 1.8rem;
+  color: #000;
+  margin-bottom: 1.5rem;
+}
+
+/* Form Fields */
+.login-card .form-label {
+  font-weight: 600;
+  color: #000;
+}
+
+.login-card .form-control,
+.login-card .form-select {
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  transition: 0.3s;
+}
+
+.login-card .form-control:focus,
+.login-card .form-select:focus {
+  border-color: #347893;
+  box-shadow: 0 0 5px rgba(52,120,147,0.5);
+  outline: none;
+}
+
+/* Login Button */
+.login-card .btn-primary {
+  background-color: #347893;
+  border-color: #2e6f7f;
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.login-card .btn-primary:hover {
+  background-color: #2e6f7f;
+  border-color: #265a63;
+}
+
+/* Error Message */
+#loginError {
+  font-size: 0.9rem;
+  color: #ff4d4d;
+  margin-top: 1rem;
+}
+
+/* Responsive tweaks */
+@media screen and (max-width: 576px) {
+  .login-card {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+}
