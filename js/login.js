@@ -2,6 +2,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
   const loginError = document.getElementById("loginError");
 
+  // 🎵 Music setup
+  const musicSelect = document.getElementById("musicSelect");
+  const loginMusic = document.getElementById("loginMusic");
+
+  if (musicSelect && loginMusic) {
+    // Default song = first option
+    loginMusic.src = musicSelect.value;
+
+    // Change when user selects another
+    musicSelect.addEventListener("change", () => {
+      loginMusic.src = musicSelect.value;
+      loginMusic.play();
+    });
+  }
+
   // Example users (replace with your real authentication later)
   const users = [
     { username: "creator1", password: "creator123", role: "creator" },
@@ -34,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
       let loggedInUsers =
         JSON.parse(localStorage.getItem("loggedInUsers")) || [];
 
-      // Prevent duplicates
       if (!loggedInUsers.some((u) => u.username === username)) {
         loggedInUsers.push({ username, role });
         localStorage.setItem("loggedInUsers", JSON.stringify(loggedInUsers));

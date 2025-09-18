@@ -100,6 +100,23 @@
             />
           </div>
 
+          <!-- Log in screen music choice -->
+          <div class="mb-3">
+            <label for="musicSelect" class="form-label"
+              >Choose Background Music</label
+            >
+            <select id="musicSelect" class="form-select">
+              <option value="music/assets/runDMCWalkThisWay.mp3">Run DMC & Areosmith Walk this Way</option>
+              <option value="music/assets/gunsNRosesWelcomeToTheJungle.mp3">Guns-N-Roses Welcome to the Jungle</option>
+              <option value="music/assets/metallicaEnterSandman.mp3">Metallica Enter Sandman</option>
+              <option value="music/assets/skidRow18AndLife.mp3">Skid Row 18 and Life</option>
+              <option value="music/assets/skilletFeelInvincible.mp3">Skillet Feel Invincible</option>
+            </select>
+          </div>
+
+          <!-- Hidden audio player -->
+          <audio id="loginMusic" autoplay loop></audio>
+
           <div class="d-grid">
             <button type="submit" class="btn btn-primary">Login</button>
           </div>
