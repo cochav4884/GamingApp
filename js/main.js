@@ -28,6 +28,7 @@ if (!username || !role) {
   window.location.href = "login.html";
 }
 
+// Update user list
 function updateLoggedInList() {
   const userList = document.getElementById("userList");
   userList.innerHTML = "";
@@ -39,12 +40,32 @@ function updateLoggedInList() {
   });
 }
 
-// Update when page loads
+// Initial load
 updateLoggedInList();
+
+// Refresh button logic
+const refreshBtn = document.getElementById("refreshUsersBtn");
+if (refreshBtn) {
+  refreshBtn.addEventListener("click", updateLoggedInList);
+}
 
 function rollDice(sides) {
   return Math.floor(Math.random() * sides) + 1;
 }
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  const username = localStorage.getItem("username");
+  if (username) {
+    let loggedInUsers = JSON.parse(localStorage.getItem("loggedInUsers")) || [];
+    loggedInUsers = loggedInUsers.filter((u) => u.username !== username);
+    localStorage.setItem("loggedInUsers", JSON.stringify(loggedInUsers));
+  }
+
+  localStorage.removeItem("username");
+  localStorage.removeItem("role");
+
+  window.location.href = "login.html";
+});
 
 // Right sidebar categories
 const rightCategories = [
