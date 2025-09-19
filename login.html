@@ -45,7 +45,9 @@
     ></script>
   </head>
   <body class="bg-light">
-    <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div
+      class="container d-flex justify-content-center align-items-center vh-100"
+    >
       <div class="login-wrapper d-flex shadow p-4">
         <!-- Login Card -->
         <div class="card p-4 login-card me-4">
@@ -85,20 +87,37 @@
 
             <!-- Music Selection -->
             <div class="mb-3">
-              <label for="musicSelect" class="form-label">Choose Background Music</label>
+              <label for="musicSelect" class="form-label"
+                >Choose Background Music</label
+              >
               <select id="musicSelect" class="form-select">
-                <option value="music/assets/runDMCWalkThisWay.mp3">Run DMC & Areosmith Walk this Way</option>
-                <option value="music/assets/gunsNRosesWelcomeToTheJungle.mp3">Guns-N-Roses Welcome to the Jungle</option>
-                <option value="music/assets/metallicaEnterSandman.mp3">Metallica Enter Sandman</option>
-                <option value="music/assets/skidRow18AndLife.mp3">Skid Row 18 and Life</option>
-                <option value="music/assets/skilletFeelInvincible.mp3">Skillet Feel Invincible</option>
+                <option value="music/assets/runDMCWalkThisWay.mp3">
+                  Run DMC & Areosmith Walk this Way
+                </option>
+                <option value="music/assets/gunsNRosesWelcomeToTheJungle.mp3">
+                  Guns-N-Roses Welcome to the Jungle
+                </option>
+                <option value="music/assets/metallicaEnterSandman.mp3">
+                  Metallica Enter Sandman
+                </option>
+                <option value="music/assets/skidRow18AndLife.mp3">
+                  Skid Row 18 and Life
+                </option>
+                <option value="music/assets/skilletFeelInvincible.mp3">
+                  Skillet Feel Invincible
+                </option>
               </select>
             </div>
 
             <audio id="loginMusic" autoplay loop></audio>
 
-            <button type="button" id="changeBgBtn" class="btn btn-secondary">Change Background</button>
-
+            <button
+              type="button"
+              id="changeBgBtn"
+              class="btn btn-secondary mb-3"
+            >
+              Change Background
+            </button>
 
             <div class="d-grid">
               <button type="submit" class="btn btn-primary">Login</button>
@@ -110,11 +129,36 @@
           </div>
         </div>
 
-        <!-- Dinosaur Game Canvas -->
-        <div class="dino-game">
-          <canvas id="dinoCanvas" width="400" height="200"></canvas>
+        <!-- Game Selection Box -->
+        <div class="game-box ms-4">
+          <h5 class="text-center mb-2 text-light">Select Game</h5>
+          <select
+            id="gameSelect"
+            class="form-select mb-2"
+            aria-label="Select Game"
+          >
+            <option value="">-- Choose a game --</option>
+            <option value="dino">Google Dino</option>
+            <option value="minisweeper">MiniSweep</option>
+          </select>
+
+          <div
+            id="gameContainer"
+            class="d-flex justify-content-center align-items-center"
+          >
+            <!-- Dino Canvas -->
+            <div id="dinoWrapper" class="hidden">
+              <canvas id="dinoCanvas" width="400" height="200"></canvas>
+            </div>
+
+            <!-- MiniSweep Grid -->
+            <div id="minisweeperWrapper" class="hidden">
+              <div id="minisweeperGrid" class="d-flex flex-wrap"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
   </body>
 </html>
