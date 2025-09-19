@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "linear-gradient(to right, #b45fffff, #84fe7bff)",
       "linear-gradient(to right, #ff7e5f, #feb47b)",
       "linear-gradient(to right, #e7ff5fff, #fe7bd7ff)",
-      "linear-gradient(to right, #6a11cb, #2575fc)",
+      "linear-gradient(to right, #6a11cb, #7faeffff)",
       "linear-gradient(to right, #56565bff, #75eef7ff)",
       "linear-gradient(to right, #43cea2, #185a9d)",
       "linear-gradient(to right, #f0e68c, #add8e6)",

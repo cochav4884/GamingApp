@@ -233,79 +233,89 @@ document.addEventListener("DOMContentLoaded", () => {
   stopMiniSweepBtn.addEventListener("click", () => miniSweepActive = false);
 
   // ==================== Snake Game ====================
-  const snakeCanvas = document.getElementById("snakeCanvas");
-  const snakeScore = document.getElementById("snakeScore");
-  const startSnakeBtn = document.getElementById("startSnakeBtn");
-  const stopSnakeBtn = document.getElementById("stopSnakeBtn");
+const snakeCanvas = document.getElementById("snakeCanvas");
+const snakeScore = document.getElementById("snakeScore");
+const startSnakeBtn = document.getElementById("startSnakeBtn");
+const stopSnakeBtn = document.getElementById("stopSnakeBtn");
 
-  let snakeInterval, snakeDirection = "RIGHT";
+let snakeInterval, snakeDirection = "RIGHT";
 
-  function initSnake() {
-    const ctx = snakeCanvas.getContext("2d");
-    const gridSize = 10;
-    const gridCols = snakeCanvas.width / gridSize;
-    const gridRows = snakeCanvas.height / gridSize;
+function initSnake() {
+  const ctx = snakeCanvas.getContext("2d");
+  const gridSize = 10;
+  const gridCols = snakeCanvas.width / gridSize;
+  const gridRows = snakeCanvas.height / gridSize;
 
-    let snake = [{ x: 9, y: 9 }];
-    let score = 0;
-    let apple = { x: Math.floor(Math.random() * gridCols), y: Math.floor(Math.random() * gridRows) };
+  let snake = [{ x: 9, y: 9 }];
+  let score = 0;
+  let apple = { x: Math.floor(Math.random() * gridCols), y: Math.floor(Math.random() * gridRows) };
 
-    const snakeHeadImg = new Image();
-    const snakeBodyImg = new Image();
-    const appleImg = new Image();
-    snakeHeadImg.src = "loginImages/googleSnakeHead.png";
-    snakeBodyImg.src = "loginImages/googleSnake.png";
-    appleImg.src = "loginImages/googleApple.png";
+  const snakeHeadImg = new Image();
+  const snakeBodyImg = new Image();
+  const appleImg = new Image();
+  snakeHeadImg.src = "loginImages/googleSnakeHead.png";
+  snakeBodyImg.src = "loginImages/googleSnake.png";
+  appleImg.src = "loginImages/googleApple.png";
 
-    function drawGame() {
-      const newHead = { ...snake[0] };
-      if (snakeDirection === "UP") newHead.y--;
-      if (snakeDirection === "DOWN") newHead.y++;
-      if (snakeDirection === "LEFT") newHead.x--;
-      if (snakeDirection === "RIGHT") newHead.x++;
+  function drawGame() {
+    const newHead = { ...snake[0] };
+    if (snakeDirection === "UP") newHead.y--;
+    if (snakeDirection === "DOWN") newHead.y++;
+    if (snakeDirection === "LEFT") newHead.x--;
+    if (snakeDirection === "RIGHT") newHead.x++;
 
-      if (
-        newHead.x < 0 || newHead.y < 0 ||
-        newHead.x >= gridCols || newHead.y >= gridRows ||
-        snake.some((part) => part.x === newHead.x && part.y === newHead.y)
-      ) {
-        clearInterval(snakeInterval);
-        alert("Game Over! Score: " + score);
-        snakeScore.textContent = "Score: 0";
-        return;
-      }
-
-      snake.unshift(newHead);
-
-      if (newHead.x === apple.x && newHead.y === apple.y) {
-        score++;
-        snakeScore.textContent = "Score: " + score;
-        apple = { x: Math.floor(Math.random() * gridCols), y: Math.floor(Math.random() * gridRows) };
-      } else {
-        snake.pop();
-      }
-
-      ctx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
-      ctx.drawImage(appleImg, apple.x * gridSize, apple.y * gridSize, gridSize, gridSize);
-      snake.forEach((part, idx) => {
-        if (idx === 0) ctx.drawImage(snakeHeadImg, part.x * gridSize, part.y * gridSize, gridSize, gridSize);
-        else ctx.drawImage(snakeBodyImg, part.x * gridSize, part.y * gridSize, gridSize, gridSize);
-      });
+    if (
+      newHead.x < 0 || newHead.y < 0 ||
+      newHead.x >= gridCols || newHead.y >= gridRows ||
+      snake.some((part) => part.x === newHead.x && part.y === newHead.y)
+    ) {
+      clearInterval(snakeInterval);
+      alert("Game Over! Score: " + score);
+      snakeScore.textContent = "Score: 0";
+      return;
     }
 
-    clearInterval(snakeInterval);
-    snakeInterval = setInterval(drawGame, 120);
+    snake.unshift(newHead);
 
-    window.addEventListener("keydown", (e) => {
-      if (e.code === "ArrowUp" && snakeDirection !== "DOWN") snakeDirection = "UP";
-      if (e.code === "ArrowDown" && snakeDirection !== "UP") snakeDirection = "DOWN";
-      if (e.code === "ArrowLeft" && snakeDirection !== "RIGHT") snakeDirection = "LEFT";
-      if (e.code === "ArrowRight" && snakeDirection !== "LEFT") snakeDirection = "RIGHT";
+    if (newHead.x === apple.x && newHead.y === apple.y) {
+      score++;
+      snakeScore.textContent = "Score: " + score;
+      apple = { x: Math.floor(Math.random() * gridCols), y: Math.floor(Math.random() * gridRows) };
+    } else {
+      snake.pop();
+    }
+
+    ctx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+    ctx.drawImage(appleImg, apple.x * gridSize, apple.y * gridSize, gridSize, gridSize);
+    snake.forEach((part, idx) => {
+      if (idx === 0) ctx.drawImage(snakeHeadImg, part.x * gridSize, part.y * gridSize, gridSize, gridSize);
+      else ctx.drawImage(snakeBodyImg, part.x * gridSize, part.y * gridSize, gridSize, gridSize);
     });
   }
 
-  startSnakeBtn.addEventListener("click", initSnake);
-  stopSnakeBtn.addEventListener("click", () => clearInterval(snakeInterval));
+  clearInterval(snakeInterval);
+  snakeInterval = setInterval(drawGame, 120);
+
+  // ==================== Key Controls ====================
+  window.addEventListener("keydown", (e) => {
+    const key = e.key.toLowerCase(); // normalize for WASD
+
+    // Arrow keys
+    if (e.code === "ArrowUp" && snakeDirection !== "DOWN") snakeDirection = "UP";
+    if (e.code === "ArrowDown" && snakeDirection !== "UP") snakeDirection = "DOWN";
+    if (e.code === "ArrowLeft" && snakeDirection !== "RIGHT") snakeDirection = "LEFT";
+    if (e.code === "ArrowRight" && snakeDirection !== "LEFT") snakeDirection = "RIGHT";
+
+    // WASD keys
+    if (key === "w" && snakeDirection !== "DOWN") snakeDirection = "UP";
+    if (key === "s" && snakeDirection !== "UP") snakeDirection = "DOWN";
+    if (key === "a" && snakeDirection !== "RIGHT") snakeDirection = "LEFT";
+    if (key === "d" && snakeDirection !== "LEFT") snakeDirection = "RIGHT";
+  });
+}
+
+startSnakeBtn.addEventListener("click", initSnake);
+stopSnakeBtn.addEventListener("click", () => clearInterval(snakeInterval));
 
   // ==================== Game Selection ====================
   gameSelect.addEventListener("change", () => {
