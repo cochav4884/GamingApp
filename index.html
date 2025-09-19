@@ -77,16 +77,21 @@
       </div>
 
       <div id="diceBox" class="lobby-section">
-        <h4>Dice Box</h4>
-        <div id="diceOptions" class="dice-options">
-          <!-- Dice thumbnails will go here -->
-        </div>
+  <h4>Dice Box</h4>
+  <div id="diceOptions" class="dice-options">
+    <!-- Dice thumbnails will go here -->
+  </div>
 
-        <button id="rollBtn" class="btn btn-primary mt-2">Roll</button>
-        <div id="diceResult" class="mt-2">
-          Result: <span id="diceValue">-</span>
-        </div>
-        <button type="button" id="logoutBtn">Logout</button>
+  <button id="rollBtn" class="btn btn-primary mt-2">Roll</button>
+
+  <!-- Dice result box -->
+  <div id="diceResultBox" class="dice-result-box mt-2">
+    <span id="diceResultLabel">Result:</span>
+    <span id="diceValue" class="dice-value">-</span>
+  </div>
+</div>
+
+        <button type="button" id="logoutBtn" class="btn btn-secondary mt-2">Logout</button>
       </div>
     </div>
     <div id="LobbyTab" class="sidebar-tab left-tab">Lobby</div>
