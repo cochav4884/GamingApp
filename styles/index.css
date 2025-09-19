@@ -49,6 +49,22 @@ body {
   cursor: pointer;
 }
 
+/* Welcome Header styling */
+.welcome-header {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-weight: bold;
+  color: #4a90e2;
+  margin: 10px 0 15px;
+  text-align: center;
+}
+
+/* Color button */
+#colorBtn {
+  width: 100%;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
 /* ==================== */
 /* Left Sidebar - Background */
 .Background {

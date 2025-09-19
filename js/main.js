@@ -150,6 +150,34 @@ document.addEventListener("DOMContentLoaded", () => {
       false,
       battlefield
     );
+
+    // ==================== Lobby Sidebar Background ====================
+    const lobbyBackgrounds = [
+      "linear-gradient(to right, #b45fffff, #84fe7bff)",
+      "linear-gradient(to right, #ff7e5f, #feb47b)",
+      "linear-gradient(to right, #e7ff5fff, #fe7bd7ff)",
+      "linear-gradient(to right, #6a11cb, #2575fc)",
+      "linear-gradient(to right, #56565bff, #75eef7ff)",
+      "linear-gradient(to right, #43cea2, #185a9d)",
+      "linear-gradient(to right, #f0e68c, #add8e6)",
+    ];
+
+    let currentLobbyBg = 0;
+    const lobbySidebar = document.getElementById("LobbySidebar");
+    const changeLobbyBgBtn = document.getElementById("changeLobbyBgBtn");
+
+    // set the initial background
+    if (lobbySidebar) {
+      lobbySidebar.style.background = lobbyBackgrounds[currentLobbyBg];
+    }
+
+    // handle button click
+    if (changeLobbyBgBtn && lobbySidebar) {
+      changeLobbyBgBtn.addEventListener("click", () => {
+        currentLobbyBg = (currentLobbyBg + 1) % lobbyBackgrounds.length;
+        lobbySidebar.style.background = lobbyBackgrounds[currentLobbyBg];
+      });
+    }
   });
 
   // ---------------- Left Sidebar Logic (Lobby & Background) ----------------

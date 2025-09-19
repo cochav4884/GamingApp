@@ -57,27 +57,31 @@
     <!-- Left Sidebar (Lobby) -->
     <div id="LobbySidebar" class="sidebar-left Lobby">
       <a href="javascript:void(0)" class="closebtn">&times;</a>
+
+      <!-- NEW Welcome Header -->
+      <h2 class="welcome-header text-center">Welcome to Horizon</h2>
+
       <div class="lobby-title">Lobby</div>
+
+      <!-- Color Changing Button -->
+      <button id="changeLobbyBgBtn" class="btn btn-info mb-3">Change Background</button>
+
       <div id="loggedInList" class="logged-in-list">
         <h3>Users in Lobby:</h3>
         <ul id="userList"></ul>
+        <button
+          type="button"
+          id="refreshUsersBtn"
+          class="btn btn-sm btn-secondary mt-2"
+        >
+          Refresh Users
+        </button>
       </div>
 
       <div id="diceBox" class="lobby-section">
         <h4>Dice Box</h4>
         <div id="diceOptions" class="dice-options">
           <!-- Dice thumbnails will go here -->
-        </div>
-        <div id="loggedInList" class="logged-in-list">
-          <h3>Users in Lobby:</h3>
-          <ul id="userList"></ul>
-          <button
-            type="button"
-            id="refreshUsersBtn"
-            class="btn btn-sm btn-secondary mt-2"
-          >
-            Refresh Users
-          </button>
         </div>
 
         <button id="rollBtn" class="btn btn-primary mt-2">Roll</button>
