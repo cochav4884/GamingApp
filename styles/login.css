@@ -4,14 +4,22 @@ body {
   background-color: #347893; /* matches main app */
   margin: 0;
   font-family: Arial, sans-serif;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 
-   /* Background image */
+  /* Optional background image */
   background: url("../loginImages/dndbgimage2.jpg") no-repeat center center fixed;
   background-size: cover;
+}
+
+/* Login wrapper flex row */
+.login-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  flex-wrap: wrap; /* for smaller screens */
 }
 
 /* Login Card */
@@ -20,7 +28,7 @@ body {
   max-width: 400px;
   padding: 2rem;
   border-radius: 12px;
-  background-color: #fff; /* white card like sidebars */
+  background-color: #fff;
   box-shadow: 0 8px 16px rgba(0,0,0,0.25);
   text-align: center;
 }
@@ -76,28 +84,37 @@ body {
   margin-top: 1rem;
 }
 
+/* Dinosaur Game */
+.dino-game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#dinoCanvas {
+  border: 2px solid #333;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  width: 400px;
+  height: 200px;
+}
+
 /* Responsive tweaks */
+@media screen and (max-width: 768px) {
+  .login-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  #dinoCanvas {
+    width: 90%;
+    height: 150px;
+    margin-top: 20px;
+  }
+}
+
 @media screen and (max-width: 576px) {
   .login-card {
     margin: 1rem;
     padding: 1.5rem;
   }
 }
-
-.logged-in-list {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(255,255,255,0.9);
-  padding: 1rem;
-  border-radius: 8px;
-  max-width: 200px;
-}
-
-.logged-in-list ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-/* log in screen background image */
