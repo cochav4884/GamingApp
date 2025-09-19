@@ -140,25 +140,45 @@
             <option value="">-- Choose a game --</option>
             <option value="dino">Google Dino</option>
             <option value="minisweeper">MiniSweep</option>
+            <option value="snake">Snake</option>
           </select>
 
           <div
             id="gameContainer"
-            class="d-flex justify-content-center align-items-center"
+            class="d-flex justify-content-center align-items-center flex-column"
           >
-            <!-- Dino Canvas -->
+            <!-- Dino Game -->
             <div id="dinoWrapper" class="hidden">
               <canvas id="dinoCanvas" width="400" height="200"></canvas>
+              <div>
+                <button id="startDinoBtn" type="button">Start</button>
+                <button id="stopDinoBtn" type="button">Stop</button>
+              </div>
             </div>
 
-            <!-- MiniSweep Grid -->
+            <!-- MiniSweep Game -->
             <div id="minisweeperWrapper" class="hidden">
-              <div id="minisweeperGrid" class="d-flex flex-wrap"></div>
+              <div id="minisweeperBox">
+                <div id="minisweeperGrid"></div>
+              </div>
+              <div>
+                <button id="startMiniSweepBtn" type="button">Start</button>
+                <button id="stopMiniSweepBtn" type="button">Stop</button>
+              </div>
+            </div>
+
+            <!-- Snake Game -->
+            <div id="snakeWrapper" class="hidden">
+              <canvas id="snakeCanvas" width="200" height="200"></canvas>
+              <p id="snakeScore">Score: 0</p>
+              <div>
+                <button id="startSnakeBtn" type="button">Start</button>
+                <button id="stopSnakeBtn" type="button">Stop</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </body>
 </html>
