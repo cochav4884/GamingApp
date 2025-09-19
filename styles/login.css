@@ -12,6 +12,17 @@ body {
   /* Optional background image */
   background: url("../loginImages/dndbgimage2.jpg") no-repeat center center fixed;
   background-size: cover;
+
+  transition: background 0.5s ease; /* smooth background change */
+}
+
+#changeBgBtn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000; /* ensures it's on top */
+  padding: 10px 15px;
+  border-radius: 5px;
 }
 
 /* Login wrapper flex row */
