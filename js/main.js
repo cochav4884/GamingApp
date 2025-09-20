@@ -14,7 +14,7 @@ import { treasureAssets } from "./assets/treasureAssets.js";
 import { populateSidebar } from "./dragdrop.js";
 import { setupDiceUI } from "./dice.js";
 import { initDice3D, rollByName, removeDice, activeDice } from "./dice3D.js";
-import { setupHostSidebar, resetBattlefield } from "./host.js";
+import { setupHostSidebar, resetBattlefield, softResetBattlefield } from "./host.js";
 // -------------------- Initialize --------------------
 const battlefield = document.getElementById("battlefield");
 initDice3D(battlefield); // Pass actual container element
@@ -98,6 +98,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (confirm("Are you sure you want to reset the battlefield?")) {
         resetBattlefield();
       }
+    });
+  }
+
+  const softResetBtn = document.getElementById("softResetBattlefieldBtn");
+  if (softResetBtn) {
+    softResetBtn.addEventListener("click", () => {
+      softResetBattlefield();
     });
   }
 

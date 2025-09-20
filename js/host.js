@@ -6,7 +6,9 @@
 
 function resetHostTools() {
   // Deselect any active tool buttons
-  document.querySelectorAll(".tool-button.active").forEach(btn => btn.classList.remove("active"));
+  document
+    .querySelectorAll(".tool-button.active")
+    .forEach((btn) => btn.classList.remove("active"));
 
   // Close the host sidebar if open
   closeHostSidebar();
@@ -14,7 +16,6 @@ function resetHostTools() {
   // Reset any global host tool state
   window.activeTool = null;
 }
-
 
 // ====================
 // Host Assets
@@ -104,7 +105,11 @@ export function setupHostSidebar() {
   populateHostSidebar("hostAssetList", document.getElementById("battlefield"));
 }
 
+// =====================
 // Reset Battlefield
+// =====================
+
+// Full reset (background + assets)
 export function resetBattlefield() {
   const battlefield = document.getElementById("battlefield");
   if (!battlefield) return;
@@ -112,15 +117,27 @@ export function resetBattlefield() {
   // 1. Clear background
   battlefield.style.backgroundImage = "none";
 
-  // 2. Remove all assets placed on the battlefield
-  // Assuming you append asset images or elements inside the battlefield div
-  battlefield.innerHTML = "";
+  // 2. Remove all battlefield assets (but keep grid overlay)
+  const assets = battlefield.querySelectorAll(".battlefield-asset");
+  assets.forEach(asset => asset.remove());
 
-  // 3. Reset host tools (deselect active tool, remove highlights)
+  // 3. Reset host tools
   resetHostTools();
 
-  // 4. Optionally, repopulate host sidebar if needed
+  // 4. Repopulate host sidebar
   populateHostSidebar("hostAssetList", battlefield);
 
   console.log("Battlefield has been reset!");
+}
+
+// Soft Reset (assets only, keep background)
+export function softResetBattlefield() {
+  const battlefield = document.getElementById("battlefield");
+  if (!battlefield) return;
+
+  // Remove only battlefield assets, keep background + grid
+  const assets = battlefield.querySelectorAll(".battlefield-asset");
+  assets.forEach(asset => asset.remove());
+
+  console.log("Battlefield assets cleared (background kept).");
 }
