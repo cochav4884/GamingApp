@@ -125,7 +125,7 @@ export function rollByName(dieName, onResult = null, opts = {}) {
   // 🎵 Play dice roll sound for the correct die
   playDiceSound(type.name);
 
-  const start = opts.position || { x: 7, y: 1, z: 0 };
+  const start = opts.position || { x: 0, y: 1, z: 0 };
   mesh.position.set(start.x, start.y, start.z);
 
   // Pick the result first

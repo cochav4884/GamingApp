@@ -379,3 +379,68 @@ body {
   pointer-events: none; /* prevent interaction */
 }
 
+.player-dot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.player-light {
+  box-shadow: 0 0 0 9999px rgba(0,0,0,0.8) inset;
+  border-radius: 0;
+}
+
+/* ==================== */
+/* Left Sidebar - Creator */
+.Creator {
+  height: 100%;
+  width: 0;               /* closed by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  background-color: #fff;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-top: 60px;
+  transition: width 0.5s ease; /* smooth slide */
+  color: #000;
+}
+
+.Creator .lobby-title {
+  font-size: 24px;
+  font-weight: bold;
+  padding-left: 32px;
+  margin-bottom: 20px;
+}
+
+.Creator section,
+.Creator div {
+  padding-left: 32px;
+  padding-top: 8px;
+}
+
+.Creator .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* When the sidebar is active/open */
+.Creator.active {
+  width: 250px;
+}
+
+/* Optional: match Host sidebar buttons inside Creator */
+.Creator button {
+  margin-bottom: 8px;
+  width: calc(100% - 32px);
+}

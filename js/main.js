@@ -19,6 +19,15 @@ import {
   resetBattlefield,
   softResetBattlefield,
 } from "./host.js";
+
+// Import creator functions and allPlayers array
+import {
+  setupCreatorSidebar,
+  addPlayerToBattlefield,
+  removeFromBattlefield,
+  allPlayers,
+} from "./creator.js";
+
 // -------------------- Initialize --------------------
 const battlefield = document.getElementById("battlefield");
 initDice3D(battlefield); // Pass actual container element
@@ -112,6 +121,46 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // -----------------------
+  // Lobby join button
+  // -----------------------
+  const joinBtn = document.getElementById("joinBattlefieldBtn");
+  if (joinBtn) {
+    joinBtn.addEventListener("click", () => {
+      const playerName = prompt("Enter your name:"); // Or get from login
+      if (!playerName) return;
+
+      // Add player to allPlayers if not exists
+      if (!allPlayers.some((p) => p.name === playerName)) {
+        allPlayers.push({
+          name: playerName,
+          color: "#00f",
+          onBattlefield: false,
+          element: null,
+        });
+      }
+
+      addPlayerToBattlefield(playerName, "#00f");
+    });
+  }
+
+  // -----------------------
+  // Lobby leave button
+  // -----------------------
+  const leaveBtn = document.getElementById("leaveBattlefieldBtn");
+  if (leaveBtn) {
+    leaveBtn.addEventListener("click", () => {
+      const playerName = prompt("Enter your name:");
+      if (!playerName) return;
+
+      removeFromBattlefield(playerName);
+    });
+  }
+
+  // -----------------------
+  // Setup creator sidebar
+  // -----------------------
+
   // Dice UI elements
   const diceOptions = document.getElementById("diceOptions");
   const rollBtn = document.getElementById("rollBtn");
@@ -119,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setupDiceUI(diceOptions); // dice thumbnails
   setupHostSidebar(); //call here, after DOM is ready
+  setupCreatorSidebar();
 
   // ==================== Animate Dice Roll ====================
   rollBtn.addEventListener("click", () => {
