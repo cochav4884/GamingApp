@@ -62,7 +62,7 @@
       <h2 class="welcome-header text-center">Welcome to the Horizon Lobby</h2>
 
       <!-- Color Changing Button -->
-      <button id="changeLobbyBgBtn" class="btn btn-secondary mb-3">Change Background</button>
+      <button id="changeLobbyBgBtn" type="button" class="btn btn-secondary mb-3">Change Background</button>
 
       <div id="loggedInList" class="logged-in-list">
         <h3>Users in Lobby:</h3>
@@ -82,7 +82,7 @@
     <!-- Dice thumbnails will go here -->
   </div>
 
-  <button id="rollBtn" class="btn btn-primary mt-2">Roll</button>
+  <button id="rollBtn" type="" class="btn btn-primary mt-2">Roll</button>
 
   <!-- Dice result box -->
   <div id="diceResultBox" class="dice-result-box mt-2">
@@ -106,6 +106,29 @@
         <ul id="backgroundList"></ul>
       </section>
     </div>
+
+     <!-- Host tab on left -->
+<div id="HostTab" class="sidebar-tab left-tab">Host</div>
+
+<!-- Host Sidebar -->
+<div id="HostSidebar" class="sidebar-left Host">
+  <a href="javascript:void(0)" class="closebtn">&times;</a>
+
+  <h2 class="text-center">Host Controls</h2>
+
+  <section>
+    <!-- Optional Host Tools description -->
+    <p>Host Tools</p>
+
+    <div id="hostControls" class="mt-3 d-flex flex-column gap-2">
+      <button id="startGameHostBtn" type="button" class="btn btn-success">Start Game</button>
+      <button id="endGameHostBtn" type="button" class="btn btn-danger" disabled>End Game</button>
+      <button id="resetGameHostBtn" type="button" class="btn btn-warning">Reset Battlefield</button>
+      <!-- Add more host-specific buttons here -->
+    </div>
+  </section>
+</div>
+
 
     <!-- Right Sidebars & Tabs -->
     <div id="rightSidebarsContainer" class="right-sidebars">

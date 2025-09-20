@@ -156,8 +156,8 @@ document.addEventListener("DOMContentLoaded", () => {
       "linear-gradient(to right, #b45fffff, #84fe7bff)",
       "linear-gradient(to right, #ff7e5f, #feb47b)",
       "linear-gradient(to right, #e7ff5fff, #fe7bd7ff)",
-      "linear-gradient(to right, #6a11cb, #7faeffff)",
-      "linear-gradient(to right, #56565bff, #75eef7ff)",
+      "linear-gradient(to right, #6a11cb, #2575fc)",
+      "linear-gradient(to right, #0e0e0fff, #49c5ceff)",
       "linear-gradient(to right, #43cea2, #185a9d)",
       "linear-gradient(to right, #f0e68c, #add8e6)",
     ];
@@ -259,6 +259,22 @@ document.addEventListener("DOMContentLoaded", () => {
   bgSidebar
     .querySelector(".closebtn")
     .addEventListener("click", () => closeBackgroundSidebar(bgSidebar, bgTab));
+
+  // ---------------- Left Sidebar Logic - Host ----------------
+  const hostTab = document.getElementById("HostTab");
+  const hostSidebar = document.getElementById("HostSidebar");
+
+  hostTab.addEventListener("click", () => {
+    hostSidebar.classList.add("active"); // open sidebar
+    document.getElementById("main").classList.add("left-open");
+    hostTab.style.display = "none"; // hide tab while open
+  });
+
+  hostSidebar.querySelector(".closebtn").addEventListener("click", () => {
+    hostSidebar.classList.remove("active"); // close sidebar
+    document.getElementById("main").classList.remove("left-open");
+    hostTab.style.display = "block"; // show tab again
+  });
 
   // ==================== Right Sidebar Open/Close ====================
   function openRightSidebar(id, className) {
