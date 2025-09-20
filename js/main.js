@@ -14,7 +14,7 @@ import { treasureAssets } from "./assets/treasureAssets.js";
 import { populateSidebar } from "./dragdrop.js";
 import { setupDiceUI } from "./dice.js";
 import { initDice3D, rollByName, removeDice, activeDice } from "./dice3D.js";
-import { setupHostSidebar } from "./host.js";
+import { setupHostSidebar, resetBattlefield } from "./host.js";
 // -------------------- Initialize --------------------
 const battlefield = document.getElementById("battlefield");
 initDice3D(battlefield); // Pass actual container element
@@ -92,6 +92,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const panelsContainer = document.getElementById("rightPanels");
   const fullscreenBtn = document.getElementById("fullscreenBtn");
   const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
+  const resetBtn = document.getElementById("resetBattlefieldBtn");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      if (confirm("Are you sure you want to reset the battlefield?")) {
+        resetBattlefield();
+      }
+    });
+  }
 
   // Dice UI elements
   const diceOptions = document.getElementById("diceOptions");

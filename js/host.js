@@ -4,6 +4,18 @@
 
 // host.js
 
+function resetHostTools() {
+  // Deselect any active tool buttons
+  document.querySelectorAll(".tool-button.active").forEach(btn => btn.classList.remove("active"));
+
+  // Close the host sidebar if open
+  closeHostSidebar();
+
+  // Reset any global host tool state
+  window.activeTool = null;
+}
+
+
 // ====================
 // Host Assets
 // ====================
@@ -92,3 +104,23 @@ export function setupHostSidebar() {
   populateHostSidebar("hostAssetList", document.getElementById("battlefield"));
 }
 
+// Reset Battlefield
+export function resetBattlefield() {
+  const battlefield = document.getElementById("battlefield");
+  if (!battlefield) return;
+
+  // 1. Clear background
+  battlefield.style.backgroundImage = "none";
+
+  // 2. Remove all assets placed on the battlefield
+  // Assuming you append asset images or elements inside the battlefield div
+  battlefield.innerHTML = "";
+
+  // 3. Reset host tools (deselect active tool, remove highlights)
+  resetHostTools();
+
+  // 4. Optionally, repopulate host sidebar if needed
+  populateHostSidebar("hostAssetList", battlefield);
+
+  console.log("Battlefield has been reset!");
+}
