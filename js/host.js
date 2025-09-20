@@ -1,10 +1,9 @@
-// Host Tools
-// Assets
-// Weapons, Tools, Items, Treasures, Materials
-
 // host.js
 
-function resetHostTools() {
+// ====================
+// Host Tools Reset
+// ====================
+export function resetHostTools() {
   // Deselect any active tool buttons
   document
     .querySelectorAll(".tool-button.active")
@@ -27,6 +26,9 @@ export const hostAssets = [
   { name: "Treasures", icon: "hostImages/treasuresIcon.png" },
   { name: "Materials", icon: "hostImages/materialsIcon.png" },
 ];
+
+// Names of host tools for visibility check
+const hostToolNames = ["Weapons", "Tools", "Items", "Treasures", "Materials"];
 
 // ====================
 // Populate Host Sidebar
@@ -105,26 +107,22 @@ export function setupHostSidebar() {
   populateHostSidebar("hostAssetList", document.getElementById("battlefield"));
 }
 
-// =====================
+// ====================
 // Reset Battlefield
-// =====================
+// ====================
 
 // Full reset (background + assets)
 export function resetBattlefield() {
   const battlefield = document.getElementById("battlefield");
   if (!battlefield) return;
 
-  // 1. Clear background
   battlefield.style.backgroundImage = "none";
 
-  // 2. Remove all battlefield assets (but keep grid overlay)
   const assets = battlefield.querySelectorAll(".battlefield-asset");
-  assets.forEach(asset => asset.remove());
+  assets.forEach((asset) => asset.remove());
 
-  // 3. Reset host tools
   resetHostTools();
 
-  // 4. Repopulate host sidebar
   populateHostSidebar("hostAssetList", battlefield);
 
   console.log("Battlefield has been reset!");
@@ -135,9 +133,84 @@ export function softResetBattlefield() {
   const battlefield = document.getElementById("battlefield");
   if (!battlefield) return;
 
-  // Remove only battlefield assets, keep background + grid
   const assets = battlefield.querySelectorAll(".battlefield-asset");
-  assets.forEach(asset => asset.remove());
+  assets.forEach((asset) => asset.remove());
 
   console.log("Battlefield assets cleared (background kept).");
+}
+
+// ====================
+// Host Mode & Asset Placement
+// ====================
+
+// Boolean to track host-only mode
+let hostMode = false;
+
+// Track host tool assets on grid
+let hostToolAssetsOnGrid = []; // {name, image, x, y, visible: false}
+
+// Open Battlefield button
+const openBtn = document.getElementById("openBattlefieldBtn");
+if (openBtn) {
+  openBtn.addEventListener("click", () => {
+    hostMode = !hostMode;
+    if (hostMode) {
+      openHostSidebar();
+      console.log("Host-only battlefield mode ON");
+    } else {
+      console.log("Host-only battlefield mode OFF");
+    }
+  });
+}
+
+// ====================
+// Battlefield Drag & Drop
+// ====================
+const battlefield = document.getElementById("battlefield");
+if (battlefield) {
+  battlefield.addEventListener("dragover", (e) => e.preventDefault());
+
+  battlefield.addEventListener("drop", (e) => {
+    e.preventDefault();
+    try {
+      const asset = JSON.parse(e.dataTransfer.getData("application/json"));
+
+      const img = document.createElement("img");
+      img.src = asset.image;
+      img.alt = asset.name;
+      img.classList.add("battlefield-asset");
+
+      const rect = battlefield.getBoundingClientRect();
+      let x = e.clientX - rect.left - 12.5;
+      let y = e.clientY - rect.top - 12.5;
+      x = Math.round(x / 25) * 25;
+      y = Math.round(y / 25) * 25;
+
+      img.style.position = "absolute";
+      img.style.left = x + "px";
+      img.style.top = y + "px";
+      img.style.width = "25px";
+      img.style.height = "25px";
+      img.style.objectFit = "cover";
+
+      // === Hide only host tool assets ===
+      if (hostToolNames.includes(asset.name)) {
+        img.classList.add("host-only"); // invisible to players
+        hostToolAssetsOnGrid.push({
+          name: asset.name,
+          image: asset.image,
+          x,
+          y,
+          visible: false,
+        });
+      }
+
+      // === Decorative assets ===
+      // No host-only class added → visible immediately
+
+      battlefield.appendChild(img);
+    } catch (err) {
+      console.error("Failed to drop asset:", err);
+    }
+  });
 }

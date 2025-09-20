@@ -372,3 +372,10 @@ body {
     display: none; /* hide vertical tabs on very small screens if you want */
   }
 }
+
+/* Hide host tool assets completely until discovered */
+.battlefield-asset.host-only {
+  display: none;       /* fully invisible and not taking space */
+  pointer-events: none; /* prevent interaction */
+}
+

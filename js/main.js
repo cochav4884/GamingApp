@@ -14,7 +14,11 @@ import { treasureAssets } from "./assets/treasureAssets.js";
 import { populateSidebar } from "./dragdrop.js";
 import { setupDiceUI } from "./dice.js";
 import { initDice3D, rollByName, removeDice, activeDice } from "./dice3D.js";
-import { setupHostSidebar, resetBattlefield, softResetBattlefield } from "./host.js";
+import {
+  setupHostSidebar,
+  resetBattlefield,
+  softResetBattlefield,
+} from "./host.js";
 // -------------------- Initialize --------------------
 const battlefield = document.getElementById("battlefield");
 initDice3D(battlefield); // Pass actual container element
@@ -312,6 +316,10 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     try {
       const asset = JSON.parse(e.dataTransfer.getData("application/json"));
+
+      // Only allow placement if hostMode is active
+      if (!hostMode) return;
+
       const img = document.createElement("img");
       img.src = asset.image;
       img.alt = asset.name;
@@ -330,38 +338,23 @@ document.addEventListener("DOMContentLoaded", () => {
       img.style.height = "25px";
       img.style.objectFit = "cover";
 
+      // Only host tool assets are hidden until discovered
+      if (hostToolNames.includes(asset.name)) {
+        img.classList.add("host-only");
+        hostToolAssetsOnGrid.push({
+          name: asset.name,
+          image: asset.image,
+          x,
+          y,
+          visible: false,
+        });
+      }
+      // Decorative/right-sidebar assets remain visible
+
       battlefield.appendChild(img);
     } catch (err) {
       console.error("Failed to drop asset:", err);
     }
-  });
-
-  battlefield.addEventListener("mousedown", (e) => {
-    const target = e.target;
-    if (!target.classList.contains("battlefield-asset")) return;
-    e.preventDefault();
-
-    const rect = battlefield.getBoundingClientRect();
-    const offsetX = e.clientX - target.offsetLeft - rect.left;
-    const offsetY = e.clientY - target.offsetTop - rect.top;
-
-    function onMouseMove(moveEvent) {
-      let x = moveEvent.clientX - rect.left - offsetX;
-      let y = moveEvent.clientY - rect.top - offsetY;
-      x = Math.round(x / 25) * 25;
-      y = Math.round(y / 25) * 25;
-
-      target.style.left = x + "px";
-      target.style.top = y + "px";
-    }
-
-    function onMouseUp() {
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-    }
-
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
   });
 
   // ==================== Fullscreen ====================
