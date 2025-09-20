@@ -14,6 +14,7 @@ import { treasureAssets } from "./assets/treasureAssets.js";
 import { populateSidebar } from "./dragdrop.js";
 import { setupDiceUI } from "./dice.js";
 import { initDice3D, rollByName, removeDice, activeDice } from "./dice3D.js";
+import { setupHostSidebar } from "./host.js";
 
 // -------------------- Initialize --------------------
 const battlefield = document.getElementById("battlefield");
@@ -99,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const diceValue = document.getElementById("diceValue");
 
   setupDiceUI(diceOptions); // dice thumbnails
+  setupHostSidebar(); // Initializes host sidebar
 
   // ==================== Animate Dice Roll ====================
   rollBtn.addEventListener("click", () => {
