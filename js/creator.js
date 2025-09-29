@@ -2,8 +2,8 @@
 // Creator Controls
 // ====================
 
-// Shared state for all players
-export let allPlayers = []; // {name, color, onBattlefield: true/false, element}
+// Shared state for all players (syncs with localStorage)
+export let allPlayers = JSON.parse(localStorage.getItem("allPlayers")) || [];
 
 // ====================
 // Open/Close Sidebar
@@ -41,7 +41,7 @@ export function setupCreatorSidebar() {
   const closeBtn = sidebar.querySelector(".closebtn");
   if (closeBtn) closeBtn.addEventListener("click", () => closeCreatorSidebar());
 
-  // Add refresh button at top of sidebar if not already present
+  // Refresh button
   if (!document.getElementById("creatorRefreshBtn")) {
     const refreshBtn = document.createElement("button");
     refreshBtn.id = "creatorRefreshBtn";
@@ -58,6 +58,7 @@ export function setupCreatorSidebar() {
 // Refresh Creator Player List
 // ====================
 export function refreshPlayerList() {
+  allPlayers = JSON.parse(localStorage.getItem("allPlayers")) || [];
   const container = document.getElementById("creatorPlayerList");
   if (!container) return;
 
@@ -75,7 +76,6 @@ export function refreshPlayerList() {
     nameSpan.innerText = player.name;
 
     if (player.onBattlefield) {
-      // --- On battlefield: show both ---
       const removeBtn = document.createElement("button");
       removeBtn.innerText = "Remove from Battlefield";
       removeBtn.className = "btn btn-sm btn-warning";
@@ -93,7 +93,6 @@ export function refreshPlayerList() {
       div.appendChild(logoutBtn);
 
     } else {
-      // --- Not on battlefield: only remove from game ---
       const logoutBtn = document.createElement("button");
       logoutBtn.innerText = "Remove from Game";
       logoutBtn.className = "btn btn-sm btn-danger";
@@ -144,6 +143,9 @@ export function addPlayerToBattlefield(name, color = "#FF0000") {
   player.onBattlefield = true;
   player.element = dot;
 
+  localStorage.setItem("allPlayers", JSON.stringify(allPlayers));
+  localStorage.setItem("allPlayersUpdatedAt", Date.now()); // trigger update
+
   refreshPlayerList();
 }
 
@@ -157,6 +159,9 @@ export function removeFromBattlefield(name) {
   if (player.element) player.element.remove();
   player.onBattlefield = false;
   player.element = null;
+
+  localStorage.setItem("allPlayers", JSON.stringify(allPlayers));
+  localStorage.setItem("allPlayersUpdatedAt", Date.now());
 
   refreshPlayerList();
 }
@@ -172,5 +177,26 @@ export function logoutPlayer(name) {
   if (player.element) player.element.remove();
 
   allPlayers.splice(index, 1);
+  localStorage.setItem("allPlayers", JSON.stringify(allPlayers));
+  localStorage.setItem("allPlayersUpdatedAt", Date.now());
+
   refreshPlayerList();
+
+  // redirect removed player to login
+  const currentUser = localStorage.getItem("username");
+  if (currentUser === name) {
+    alert("You have been removed from the game.");
+    localStorage.removeItem("username");
+    localStorage.removeItem("role");
+    window.location.href = "login.html";
+  }
 }
+
+// ====================
+// Listen to localStorage changes to sync across tabs
+// ====================
+window.addEventListener("storage", (e) => {
+  if (e.key === "allPlayersUpdatedAt") {
+    refreshPlayerList();
+  }
+});

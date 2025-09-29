@@ -1,184 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Gaming App</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Gaming App</title>
 
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- FAVICONS -->
-    <link rel="icon" type="image/x-icon" href="/public/favicon.ico?v=2" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/public/favicon-32x32.png?v=2"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/public/favicon-16x16.png?v=2"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/public/apple-touch-icon.png"
-    />
-    <link rel="manifest" href="/public/site.webmanifest?v=2" />
+  <!-- FAVICONS -->
+  <link rel="icon" type="image/x-icon" href="/public/favicon.ico?v=2" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png" />
+  <link rel="manifest" href="/public/site.webmanifest?v=2" />
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles/Login.css" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles/Login.css" />
 
-    <!-- Login JS -->
-    <script src="js/Login.js" defer></script>
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body>
+  <div class="container d-flex justify-content-center align-items-center vh-100">
 
-    <!-- Bootstrap JS Bundle -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      defer
-    ></script>
-  </head>
-  <body class="bg-light">
-    <div
-      class="container d-flex justify-content-center align-items-center vh-100"
-    >
-      <div class="login-wrapper d-flex shadow p-4">
-        <!-- Login Card -->
-        <div class="card p-4 login-card me-4">
-          <h2 class="text-center mb-4">Game Lobby Login</h2>
-          <form id="loginForm">
-            <div class="mb-3">
-              <label for="username" class="form-label">Username</label>
-              <input
-                type="text"
-                class="form-control"
-                id="username"
-                placeholder="Enter username"
-                required
-              />
+    <div class="login-wrapper d-flex shadow p-4 flex-column align-items-center">
+      
+      <!-- Toggle Button -->
+      <button id="toggleLoginBtn" class="btn btn-dark mb-3" type="button" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#loginCollapse" 
+              aria-expanded="false" 
+              aria-controls="loginCollapse">
+        Show Login Panel
+      </button>
+
+      <!-- Collapsible Section (hidden by default) -->
+      <div id="loginCollapse" class="collapse w-100">
+        <div class="d-flex flex-wrap justify-content-center">
+
+          <!-- Login Card -->
+          <div class="card p-4 login-card me-4">
+            <h2 class="text-center mb-4">Game Lobby Login</h2>
+            <form id="loginForm">
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Enter username" required />
+              </div>
+
+              <div class="mb-3">
+                <label for="role" class="form-label">Role</label>
+                <select class="form-select" id="role" required>
+                  <option value="" disabled selected>Select your role</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter password" required />
+              </div>
+
+              <!-- Music Selection -->
+              <div class="mb-3">
+                <label for="musicSelect" class="form-label">Choose Background Music</label>
+                <select id="musicSelect" class="form-select"> 
+                  <option value="music/assets/metallicaEnterSandman.mp3">Metallica Enter Sandman</option>
+                  <option value="music/assets/runDMCWalkThisWay.mp3">Run DMC & Aerosmith Walk this Way</option>
+                  <option value="music/assets/gunsNRosesWelcomeToTheJungle.mp3">Guns-N-Roses Welcome to the Jungle</option>
+                  <option value="music/assets/skidRow18AndLife.mp3">Skid Row 18 and Life</option>
+                  <option value="music/assets/skilletFeelInvincible.mp3">Skillet Feel Invincible</option>
+                </select>
+              </div>
+
+              <audio id="loginMusic" autoplay loop></audio>
+              <button type="button" id="changeBgBtn" class="btn btn-secondary mb-3">Change Background</button>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Login</button>
+              </div>
+            </form>
+
+            <div id="loginError" class="text-danger mt-3 text-center">
+              Invalid username, role, or password.
             </div>
-
-            <div class="mb-3">
-              <label for="role" class="form-label">Role</label>
-              <select class="form-select" id="role" required>
-                <option value="" disabled selected>Select your role</option>
-                <option value="creator">Creator</option>
-                <option value="host">Host</option>
-                <option value="player">Player</option>
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                placeholder="Enter password"
-                required
-              />
-            </div>
-
-            <!-- Music Selection -->
-            <div class="mb-3">
-              <label for="musicSelect" class="form-label"
-                >Choose Background Music</label
-              >
-              <select id="musicSelect" class="form-select">
-                <option value="music/assets/runDMCWalkThisWay.mp3">
-                  Run DMC & Areosmith Walk this Way
-                </option>
-                <option value="music/assets/gunsNRosesWelcomeToTheJungle.mp3">
-                  Guns-N-Roses Welcome to the Jungle
-                </option>
-                <option value="music/assets/metallicaEnterSandman.mp3">
-                  Metallica Enter Sandman
-                </option>
-                <option value="music/assets/skidRow18AndLife.mp3">
-                  Skid Row 18 and Life
-                </option>
-                <option value="music/assets/skilletFeelInvincible.mp3">
-                  Skillet Feel Invincible
-                </option>
-              </select>
-            </div>
-
-            <audio id="loginMusic" autoplay loop></audio>
-
-            <button
-              type="button"
-              id="changeBgBtn"
-              class="btn btn-secondary mb-3"
-            >
-              Change Background
-            </button>
-
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary">Login</button>
-            </div>
-          </form>
-
-          <div id="loginError" class="text-danger mt-3 text-center">
-            Invalid username, role, or password.
           </div>
-        </div>
 
-        <!-- Game Selection Box -->
-        <div class="game-box ms-4">
-          <h5 class="text-center mb-2 text-light">Select Game</h5>
-          <select
-            id="gameSelect"
-            class="form-select mb-2"
-            aria-label="Select Game"
-          >
-            <option value="">-- Choose a game --</option>
-            <option value="dino">Google Dino</option>
-            <option value="minisweeper">MiniSweep</option>
-            <option value="snake">Snake</option>
-          </select>
+          <!-- Game Selection Box -->
+          <div class="game-box ms-4">
+            <h5 class="text-center mb-2 text-light">Select Game</h5>
+            <select id="gameSelect" class="form-select mb-2" aria-label="Select Game">
+              <option value="">-- Choose a game --</option>
+              <option value="dino">Google Dino</option>
+              <option value="minisweeper">MiniSweep</option>
+              <option value="snake">Snake</option>
+            </select>
 
-          <div
-            id="gameContainer"
-            class="d-flex justify-content-center align-items-center flex-column"
-          >
-            <!-- Dino Game -->
-            <div id="dinoWrapper" class="hidden">
-              <canvas id="dinoCanvas" width="400" height="200"></canvas>
-              <div>
-                <button id="startDinoBtn" type="button">Start</button>
-                <button id="stopDinoBtn" type="button">Stop</button>
+            <div id="gameContainer" class="d-flex justify-content-center align-items-center flex-column">
+              <!-- Dino Game -->
+              <div id="dinoWrapper" class="hidden">
+                <canvas id="dinoCanvas" width="400" height="200"></canvas>
+                <div>
+                  <button id="startDinoBtn" type="button">Start</button>
+                  <button id="stopDinoBtn" type="button">Stop</button>
+                </div>
               </div>
-            </div>
 
-            <!-- MiniSweep Game -->
-            <div id="minisweeperWrapper" class="hidden">
-              <div id="minisweeperBox">
-                <div id="minisweeperGrid"></div>
+              <!-- MiniSweep Game -->
+              <div id="minisweeperWrapper" class="hidden">
+                <div id="minisweeperBox"><div id="minisweeperGrid"></div></div>
+                <div>
+                  <button id="startMiniSweepBtn" type="button">Start</button>
+                  <button id="stopMiniSweepBtn" type="button">Stop</button>
+                </div>
               </div>
-              <div>
-                <button id="startMiniSweepBtn" type="button">Start</button>
-                <button id="stopMiniSweepBtn" type="button">Stop</button>
-              </div>
-            </div>
 
-            <!-- Snake Game -->
-            <div id="snakeWrapper" class="hidden">
-              <canvas id="snakeCanvas" width="200" height="200"></canvas>
-              <p id="snakeScore">Score: 0</p>
-              <div>
-                <button id="startSnakeBtn" type="button">Start</button>
-                <button id="stopSnakeBtn" type="button">Stop</button>
+              <!-- Snake Game -->
+              <div id="snakeWrapper" class="hidden">
+                <canvas id="snakeCanvas" width="200" height="200"></canvas>
+                <p id="snakeScore">Score: 0</p>
+                <div>
+                  <button id="startSnakeBtn" type="button">Start</button>
+                  <button id="stopSnakeBtn" type="button">Stop</button>
+                </div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
+
     </div>
-  </body>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // ==================== Users ====================
+    const players = [
+      { name: "Spartan Nebula", roles: ["creator", "creatorHost"], color: "Orange", password: "SNOrange123" },
+      { name: "Zaphina", roles: ["player"], color: "Green", password: "ZGreen123" },
+      { name: "Mercy", roles: ["player", "host"], color: "Violet", password: "MViolet123" },
+      { name: "Slime", roles: ["player", "host"], color: "Yellow", password: "SYellow123" },
+      { name: "LJ", roles: ["player"], color: "Blue", password: "LJBlue123" },
+      { name: "Orbital", roles: ["player"], color: "Red", password: "ORed123" },
+      { name: "Cyle", roles: ["player"], color: "White", password: "CWhite123" },
+      { name: "Silver", roles: ["player", "host"], color: "Pink", password: "Spink123" },
+      { name: "StarLord", roles: ["administrator"], color: "Black", password: "SLBlack123" }
+    ];
+
+    const loginForm = document.getElementById("loginForm");
+    const usernameInput = document.getElementById("username");
+    const roleSelect = document.getElementById("role");
+    const passwordInput = document.getElementById("password");
+    const loginError = document.getElementById("loginError");
+
+    // Dynamic Role Selection
+    usernameInput.addEventListener("input", () => {
+      const user = players.find(p => p.name === usernameInput.value.trim());
+      roleSelect.innerHTML = '<option value="" disabled selected>Select your role</option>';
+      if (user) {
+        user.roles.forEach(r => {
+          const option = document.createElement("option");
+          option.value = r;
+          option.textContent =
+            r === "creatorHost" ? "Creator/Host" :
+            r === "playerHost" ? "Player/Host" :
+            r === "administrator" ? "Administrator" :
+            r.charAt(0).toUpperCase() + r.slice(1);
+          roleSelect.appendChild(option);
+        });
+      }
+    });
+
+    // Login Submission
+    loginForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const username = usernameInput.value.trim();
+      const role = roleSelect.value;
+      const password = passwordInput.value;
+
+      const user = players.find(p => p.name === username && p.roles.includes(role) && p.password === password);
+      if (!user) {
+        loginError.style.display = "block";
+      } else {
+        loginError.style.display = "none";
+        localStorage.setItem("username", user.name);
+        localStorage.setItem("role", role);
+        localStorage.setItem("color", user.color);
+        alert(`Logged in as ${user.name} (${role})!`);
+        // Redirect to lobby page
+        window.location.href = "lobby.html";
+      }
+    });
+
+    // Music
+    const musicSelect = document.getElementById("musicSelect");
+    const loginMusic = document.getElementById("loginMusic");
+    loginMusic.src = musicSelect.value;
+    loginMusic.play().catch(() => console.log("Autoplay blocked"));
+    musicSelect.addEventListener("change", () => {
+      loginMusic.src = musicSelect.value;
+      loginMusic.play();
+    });
+
+    // Background
+    const backgrounds = [
+      "url('loginImages/loginImage.jpg') no-repeat center center / cover",
+      "linear-gradient(to right, #ff7e5f, #feb47b)",
+      "url('loginImages/dndbgimage3.jpg') no-repeat center center / cover",
+      "linear-gradient(to right, #6a11cb, #2575fc)",
+      "url('loginImages/dndbgimage4.jpg') no-repeat center center / cover",
+      "linear-gradient(to right, #43cea2, #185a9d)",
+      "url('loginImages/loginImage2.jpg') no-repeat center center / cover",
+      "linear-gradient(to right, #f0e68c, #add8e6)",
+      "url('loginImages/loginImage3.jpg') no-repeat center center / cover",
+      "linear-gradient(to right, #f0e68c, #add8e6)",
+      "url('loginImages/loginImage4.jpg') no-repeat center center / cover",
+      "linear-gradient(to right, #f0e68c, #add8e6)",
+      "url('loginImages/loginImage5.jpg') no-repeat center center / cover",
+      "linear-gradient(to right, #f0e68c, #add8e6)",
+      "url('loginImages/loginImage6.jpg') no-repeat center center / cover",
+      "linear-gradient(to right, #f0e68c, #add8e6)",
+      "url('loginImages/loginImage7.jpg') no-repeat center center / cover",
+      "linear-gradient(to right, #f0e68c, #add8e6)",
+      "url('loginImages/loginImage8.jpg') no-repeat center center / cover",
+      "linear-gradient(to right, #f0e68c, #add8e6)",
+      "url('loginImages/loginImage9.jpg') no-repeat center center / cover",
+    ];
+    let currentBg = 0;
+    const changeBgBtn = document.getElementById("changeBgBtn");
+    document.body.style.background = backgrounds[currentBg];
+    changeBgBtn.addEventListener("click", () => {
+      currentBg = (currentBg + 1) % backgrounds.length;
+      document.body.style.background = backgrounds[currentBg];
+    });
+
+    // Game display
+    const dinoWrapper = document.getElementById("dinoWrapper");
+    const minisweeperWrapper = document.getElementById("minisweeperWrapper");
+    const snakeWrapper = document.getElementById("snakeWrapper");
+    const gameSelect = document.getElementById("gameSelect");
+    [dinoWrapper, minisweeperWrapper, snakeWrapper].forEach(w => w.classList.add("hidden"));
+    gameSelect.addEventListener("change", () => {
+      [dinoWrapper, minisweeperWrapper, snakeWrapper].forEach(w => w.classList.add("hidden"));
+      if (gameSelect.value === "dino") dinoWrapper.classList.remove("hidden");
+      if (gameSelect.value === "minisweeper") minisweeperWrapper.classList.remove("hidden");
+      if (gameSelect.value === "snake") snakeWrapper.classList.remove("hidden");
+    });
+
+    // Toggle button text change
+    const toggleLoginBtn = document.getElementById("toggleLoginBtn");
+    const loginCollapse = document.getElementById("loginCollapse");
+    loginCollapse.addEventListener("shown.bs.collapse", () => {
+      toggleLoginBtn.textContent = "Hide Login Panel";
+    });
+    loginCollapse.addEventListener("hidden.bs.collapse", () => {
+      toggleLoginBtn.textContent = "Show Login Panel";
+    });
+  });
+  </script>
+</body>
 </html>

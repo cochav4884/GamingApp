@@ -103,6 +103,7 @@ body {
   font-size: 0.9rem;
   color: #ff4d4d;
   margin-top: 1rem;
+  display: none;
 }
 
 /* ==================== Game Selection & Wrappers ==================== */
