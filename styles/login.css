@@ -1,6 +1,6 @@
 /* ==================== Body ==================== */
 body {
-  background-color: #347893; /* matches main app */
+  background-color: #347893;
   margin: 0;
   font-family: Arial, sans-serif;
   height: 100vh;
@@ -12,7 +12,7 @@ body {
   background: url("../loginImages/dndbgimage2.jpg") no-repeat center center fixed;
   background-size: cover;
 
-  transition: background 0.5s ease; /* smooth background change */
+  transition: background 0.5s ease;
 }
 
 /* Change Background Button */
@@ -20,7 +20,7 @@ body {
   position: fixed;
   top: 20px;
   right: 20px;
-  z-index: 1000; /* ensures it's on top */
+  z-index: 1000;
   padding: 10px 15px;
   border-radius: 5px;
   border: 1px solid #fff;
@@ -40,7 +40,7 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 30px;
-  flex-wrap: wrap; /* for smaller screens */
+  flex-wrap: wrap;
 }
 
 /* Login Card */
@@ -106,7 +106,7 @@ body {
   display: none;
 }
 
-/* ==================== Game Selection & Wrappers ==================== */
+/* ==================== Game Selection Dropdown (general layout) ==================== */
 #gameSelect {
   margin-bottom: 10px;
   width: 100%;
@@ -120,138 +120,11 @@ body {
   display: none !important;
 }
 
-/* Wrapper styling for games */
-#dinoWrapper,
-#minisweeperWrapper,
-#snakeWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px; /* spacing between canvas/grid and buttons */
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f8f9fa;
-}
-
-/* ==================== Dino Game ==================== */
-#dinoCanvas {
-  border: 2px solid #333;
-  border-radius: 8px;
-  background-color: #f0f0f0;
-  width: 400px;
-  height: 200px;
-  margin-bottom: 5px;
-}
-
-/* ==================== MiniSweep Game ==================== */
-#minisweeperWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px; /* space between grid and buttons */
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f8f9fa;
-  width: 260px; /* matches 8x8 grid + gaps */
-  box-sizing: border-box;
-}
-
-#minisweeperBox {
-  border: 2px solid #333;
-  border-radius: 8px;
-  background-color: #f0f0f0;
-  padding: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#minisweeperGrid {
-  display: grid;
-  grid-template-columns: repeat(8, 25px);
-  grid-template-rows: repeat(8, 25px);
-  gap: 2px;
-}
-
-#minisweeperGrid button {
-  width: 1006;
-  height: 100%;
-  padding: 0;
-  font-size: 14px;
-  text-align: center;
-  border: 1px solid #999;
-  border-radius: 3px;
-  background-color: #e0e0e0;
-  cursor: pointer;
-}
-
-
-/* ==================== Snake Game ==================== */
-#snakeCanvas {
-  border: 2px solid #333;
-  border-radius: 8px;
-  background-color: #f0f0f0;
-  margin-bottom: 5px;
-}
-
-#snakeScore {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-/* Flex container for Start/Stop buttons */
-#dinoWrapper .d-flex,
-#minisweeperWrapper .d-flex,
-#snakeWrapper .d-flex {
-  justify-content: center;
-  gap: 5px;
-  margin-top: 5px;
-}
-
-/* ==================== Game Buttons ==================== */
-#dinoWrapper button,
-#minisweeperWrapper button,
-#snakeWrapper button {
-  margin: 0 5px;
-  padding: 5px 10px;
-  font-size: 0.9rem;
-  border-radius: 5px;
-  border: 1px solid #347893;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-#dinoWrapper button:hover,
-#minisweeperWrapper button:hover,
-#snakeWrapper button:hover {
-  background-color: #347893;
-  color: #fff;
-}
-
 /* ==================== Responsive Tweaks ==================== */
 @media screen and (max-width: 768px) {
   .login-wrapper {
     flex-direction: column;
     align-items: center;
-  }
-
-  #dinoCanvas {
-    width: 90%;
-    height: 150px;
-    margin-top: 20px;
-  }
-
-  #minisweeperWrapper {
-    width: 90%;
-    margin-top: 20px;
-  }
-
-  #snakeWrapper {
-    width: 90%;
-    margin-top: 20px;
   }
 }
 

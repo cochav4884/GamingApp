@@ -16,7 +16,8 @@
   <link rel="manifest" href="/public/site.webmanifest?v=2" />
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="styles/Login.css" />
+  <link rel="stylesheet" href="styles/login.css" />
+  <link rel="stylesheet" href="styles/games.css" />
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
@@ -129,130 +130,9 @@
 
   </div>
 
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // ==================== Users ====================
-    const players = [
-      { name: "Spartan Nebula", roles: ["creator", "creatorHost"], color: "Orange", password: "SNOrange123" },
-      { name: "Zaphina", roles: ["player"], color: "Green", password: "ZGreen123" },
-      { name: "Mercy", roles: ["player", "host"], color: "Violet", password: "MViolet123" },
-      { name: "Slime", roles: ["player", "host"], color: "Yellow", password: "SYellow123" },
-      { name: "LJ", roles: ["player"], color: "Blue", password: "LJBlue123" },
-      { name: "Orbital", roles: ["player"], color: "Red", password: "ORed123" },
-      { name: "Cyle", roles: ["player"], color: "White", password: "CWhite123" },
-      { name: "Silver", roles: ["player", "host"], color: "Pink", password: "Spink123" },
-      { name: "StarLord", roles: ["administrator"], color: "Black", password: "SLBlack123" }
-    ];
-
-    const loginForm = document.getElementById("loginForm");
-    const usernameInput = document.getElementById("username");
-    const roleSelect = document.getElementById("role");
-    const passwordInput = document.getElementById("password");
-    const loginError = document.getElementById("loginError");
-
-    // Dynamic Role Selection
-    usernameInput.addEventListener("input", () => {
-      const user = players.find(p => p.name === usernameInput.value.trim());
-      roleSelect.innerHTML = '<option value="" disabled selected>Select your role</option>';
-      if (user) {
-        user.roles.forEach(r => {
-          const option = document.createElement("option");
-          option.value = r;
-          option.textContent =
-            r === "creatorHost" ? "Creator/Host" :
-            r === "playerHost" ? "Player/Host" :
-            r === "administrator" ? "Administrator" :
-            r.charAt(0).toUpperCase() + r.slice(1);
-          roleSelect.appendChild(option);
-        });
-      }
-    });
-
-    // Login Submission
-    loginForm.addEventListener("submit", e => {
-      e.preventDefault();
-      const username = usernameInput.value.trim();
-      const role = roleSelect.value;
-      const password = passwordInput.value;
-
-      const user = players.find(p => p.name === username && p.roles.includes(role) && p.password === password);
-      if (!user) {
-        loginError.style.display = "block";
-      } else {
-        loginError.style.display = "none";
-        localStorage.setItem("username", user.name);
-        localStorage.setItem("role", role);
-        localStorage.setItem("color", user.color);
-        alert(`Logged in as ${user.name} (${role})!`);
-        window.location.href = "lobby.html";
-      }
-    });
-
-    // Music
-    const musicSelect = document.getElementById("musicSelect");
-    const loginMusic = document.getElementById("loginMusic");
-    loginMusic.src = musicSelect.value;
-    loginMusic.play().catch(() => console.log("Autoplay blocked"));
-    musicSelect.addEventListener("change", () => {
-      loginMusic.src = musicSelect.value;
-      loginMusic.play();
-    });
-
-    // Background
-    const backgrounds = [
-      "url('loginImages/loginImage.jpg') no-repeat center center / cover",
-      "linear-gradient(to right, #ff7e5f, #feb47b)",
-      "url('loginImages/dndbgimage3.jpg') no-repeat center center / cover",
-      "linear-gradient(to right, #6a11cb, #2575fc)",
-      "url('loginImages/dndbgimage4.jpg') no-repeat center center / cover",
-      "linear-gradient(to right, #43cea2, #185a9d)",
-      "url('loginImages/loginImage2.jpg') no-repeat center center / cover",
-      "linear-gradient(to right, #f0e68c, #add8e6)",
-      "url('loginImages/loginImage3.jpg') no-repeat center center / cover",
-      "linear-gradient(to right, #000000, #ffffff)",
-      "url('loginImages/loginImage4.jpg') no-repeat center center / cover",
-      "linear-gradient(to right, #005500, #ffffff)",
-      "url('loginImages/loginImage5.jpg') no-repeat center center / cover",
-      "linear-gradient(to right, #550000, #ffffff)",
-      "url('loginImages/loginImage6.jpg') no-repeat center center / cover",
-      "linear-gradient(to right, #000055, #ffffff)",
-      "url('loginImages/loginImage7.jpg') no-repeat center center / cover",
-      "linear-gradient(to right, #000000, #000000)",
-      "url('loginImages/loginImage8.jpg') no-repeat center center / cover",
-      "linear-gradient(to right, #ffffff, #ffffff)",
-      "url('loginImages/loginImage9.jpg') no-repeat center center / cover",
-    ];
-    let currentBg = 0;
-    const changeBgBtn = document.getElementById("changeBgBtn");
-    document.body.style.background = backgrounds[currentBg];
-    changeBgBtn.addEventListener("click", () => {
-      currentBg = (currentBg + 1) % backgrounds.length;
-      document.body.style.background = backgrounds[currentBg];
-    });
-
-    // Game display
-    const dinoWrapper = document.getElementById("dinoWrapper");
-    const minisweeperWrapper = document.getElementById("minisweeperWrapper");
-    const snakeWrapper = document.getElementById("snakeWrapper");
-    const gameSelect = document.getElementById("gameSelect");
-    [dinoWrapper, minisweeperWrapper, snakeWrapper].forEach(w => w.classList.add("hidden"));
-    gameSelect.addEventListener("change", () => {
-      [dinoWrapper, minisweeperWrapper, snakeWrapper].forEach(w => w.classList.add("hidden"));
-      if (gameSelect.value === "dino") dinoWrapper.classList.remove("hidden");
-      if (gameSelect.value === "minisweeper") minisweeperWrapper.classList.remove("hidden");
-      if (gameSelect.value === "snake") snakeWrapper.classList.remove("hidden");
-    });
-
-    // Toggle button text change
-    const toggleLoginBtn = document.getElementById("toggleLoginBtn");
-    const loginCollapse = document.getElementById("loginCollapse");
-    loginCollapse.addEventListener("shown.bs.collapse", () => {
-      toggleLoginBtn.textContent = "Hide Login Panel";
-    });
-    loginCollapse.addEventListener("hidden.bs.collapse", () => {
-      toggleLoginBtn.textContent = "Show Login Panel";
-    });
-  });
-  </script>
+    <!-- JS -->
+  <script src="js/login.js"></script>
+  <script src="js/games.js"></script>
+  <script src="js/music.js"></script>
 </body>
 </html>
